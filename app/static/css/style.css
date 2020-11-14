@@ -1,0 +1,44 @@
+.container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    margin:0;
+    background: white;
+}
+.files::-webkit-scrollbar {
+    display: none;
+}
+.files {
+    background-color: #F5F5F5;;
+    overflow: scroll;
+    height: 100%;
+    float: left;
+    position: relative;
+    width: 240px;
+}
+#body {
+    margin: 0;
+    padding: 0;
+    box-sizing:border-box;
+    height: 100%;
+    overflow: hidden;
+}
+.files_list_text {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    text-align: center;
+    user-select: none;
+}
+.sanina_textarea {
+    border: none;
+    position: absolute;
+    height: 100vh;
+    width: calc(100% - 240px);
+    left: 240px;
+}
+.sanina_textarea:focus {
+    outline: none;
+}
+.sanin_text {
+    text-align: left;
+}
