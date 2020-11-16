@@ -55,3 +55,11 @@ def auth(request):
         return render(request, "signin.html")
     else:
         return redirect("app:editor")
+
+
+# Page for editor.js package testing and development
+def editorjs_example(request):
+    if request.user.is_authenticated:
+        return render(request, 'editorjs_example.html')
+    else:
+        return redirect("app:auth")
