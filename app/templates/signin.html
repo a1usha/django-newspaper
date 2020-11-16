@@ -20,7 +20,7 @@
 <body class="text-center">
 <form class="form-signin" action="{% url 'app:login' %}" method="post">
     {% csrf_token %}
-    <img class="mb-4" src="{% static 'images/cat_vibe.gif' %}" alt="" width="100" height="100" id="image_logo">
+    <img class="mb-4" src="{% static 'images/cat.png' %}" alt="" width="100" height="100" id="image_logo">
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
     <label for="inlineFormInputName" class="sr-only">Email address</label>
     <input name="login" type="text" class="form-control" id="inlineFormInputName" placeholder="Username" required autofocus>
