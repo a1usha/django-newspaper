@@ -2,33 +2,39 @@
     width: 100vw;
     height: 100vh;
     position: relative;
-    margin:0;
+    margin: 0;
     background: white;
 }
+
 .files::-webkit-scrollbar {
     display: none;
 }
+
 .files {
-    background-color: #F5F5F5;;
+    background-color: #F5F5F5;
+    ;
     overflow: scroll;
     height: 100%;
     float: left;
     position: relative;
     width: 240px;
 }
+
 #body {
     margin: 0;
     padding: 0;
-    box-sizing:border-box;
+    box-sizing: border-box;
     height: 100%;
     overflow: hidden;
 }
+
 .files_list_text {
     padding-top: 30px;
     padding-bottom: 30px;
     text-align: center;
     user-select: none;
 }
+
 .sanina_textarea {
     border: none;
     position: absolute;
@@ -36,9 +42,107 @@
     width: calc(100% - 240px);
     left: 240px;
 }
+
 .sanina_textarea:focus {
     outline: none;
 }
+
 .sanin_text {
     text-align: left;
+}
+
+#image_logo {
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+}
+
+#image_logo {
+    -webkit-animation: rotation 0.25s infinite linear;
+}
+
+@-webkit-keyframes rotation {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(359deg);
+    }
+}
+
+.parent {
+    position: relative;
+    height: 100vh;
+}
+
+.child {
+    /* padding: 20px; */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -170px 0 0 -170px;
+}
+
+.page {
+    width: 612px;
+    height: 792px;
+    border: 1px solid black;
+    margin: 20px;
+    position: relative;
+}
+
+.page .content .column {
+    text-align: justify;
+    font-size: 10pt;
+}
+
+.page .content .column blockquote {
+    border-left: 2px solid #999999;
+    background: #DEDEDE;
+    padding: 10px;
+    margin: 4px 20px;
+    clear: both;
+}
+
+.page .content .column img {
+    float: left;
+    margin: 10px;
+}
+
+.page .content .column p {
+    padding: 0 10px;
+    margin: 10px 0;
+}
+
+.page .content .column h1 {
+    padding: 0 10px;
+}
+
+.page .header {
+    text-align: center;
+    font-size: 18pt;
+    font-family: helvetica, arial;
+    padding: 20px 0 0;
+}
+
+.page .header hr,
+.page .footer hr {
+    width: 400px;
+}
+
+.page .footer {
+    text-align: center;
+}
+
+.page .footer span {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+#page_template {
+    display: none;
+}
+
+.enclosure {
+    border: 1px dashed black
 }
