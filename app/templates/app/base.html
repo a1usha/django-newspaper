@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  {% load static %}
+
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!--    <link rel="icon" href="../../../../favicon.ico">-->
+
+    {% if title %}
+        <title>Newspaper Editor - {{ title }}</title>
+    {% else %}
+        <title>Newspaper Editor</title>
+    {% endif %}
+
+    {% block extra_head %}{% endblock %}
+  </head>
+
+  <body class="{% block body_class %}text-center{% endblock %}">
+    {% block content %}{% endblock %}
+  </body>
+
+  {% block script %}{% endblock %}
+
+</html>

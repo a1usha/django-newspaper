@@ -28,7 +28,7 @@ def loginView(request):
 
 class EditorView(LoginRequiredMixin, TemplateView):
     login_url = "/auth/"
-    template_name = "editor.html"
+    template_name = "app/editor.html"
 
 
 # @login_required(login_url='/')
@@ -49,10 +49,9 @@ def index(request):
 # class AuthView(TemplateView):
 #     template_name = 'signin.html'
 
-
 def auth(request):
     if not request.user.is_authenticated:
-        return render(request, "signin.html")
+        return render(request, "app/signin.html")
     else:
         return redirect("app:editor")
 
