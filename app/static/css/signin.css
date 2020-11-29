@@ -52,7 +52,7 @@ body {
   -webkit-transform: rotate(360deg);
 }
 #image_logo {
-		-webkit-animation: rotation 10s infinite linear;
+		-webkit-animation: rotation 15s infinite linear;
 }
 
 @-webkit-keyframes rotation {

@@ -1,44 +1,209 @@
-.container {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    margin:0;
-    background: white;
-}
-.files::-webkit-scrollbar {
-    display: none;
-}
-.files {
-    background-color: #F5F5F5;;
-    overflow: scroll;
-    height: 100%;
-    float: left;
-    position: relative;
-    width: 240px;
-}
-#body {
-    margin: 0;
-    padding: 0;
-    box-sizing:border-box;
-    height: 100%;
+/* Add a black background color to the top navigation */
+.topnav {
+    background-color:  rgb(104, 104, 104);;
     overflow: hidden;
-}
-.files_list_text {
-    padding-top: 30px;
-    padding-bottom: 30px;
+    position: fixed;
+    width: 100%;
+    height: 50px;
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+  }
+  
+  /* Style the links inside the navigation bar */
+  .topnav a {
+    float: left;
+    color: #f2f2f2;
     text-align: center;
-    user-select: none;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  /* Change the color of links on hover */
+  .topnav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /* Add a color to the active/current link */
+  .topnav a.active {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+
+/* The sidebar menu */
+.sidenav {
+    margin-top: 50px;
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 200px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: rgb(104, 104, 104); /* Black */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+  }
+  
+  /* The navigation menu links */
+  .sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #dddddd;
+    display: block;
+  }
+
+  .sidenav .sidebar-heading {
+    padding: 6px 8px 6px 16px;
+    color: #dddddd;
+    font-size: 25px;
+  }
+  
+  /* When you mouse over the navigation links, change their color */
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+  
+  /* Style page content */
+  .main {
+    margin-top: 50px;
+    margin-left: 200px; /* Same as the width of the sidebar */
+    padding: 0px 10px;
+  }
+  
+  /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+  @media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+  }
+
+.btn-circle { 
+    width: 55px; 
+    height: 55px; 
+    padding: 10px 10px; 
+    border-radius: 30px; 
+    font-size: 23px; 
+    text-align: center; 
+} 
+
+#editor {
+    transform-origin: top center;
 }
-.sanina_textarea {
-    border: none;
-    position: absolute;
-    height: 100vh;
-    width: calc(100% - 240px);
-    left: 240px;
+
+.page {
+    width: 42cm;
+    height: 59.4cm;
+  /* margin: 20px; */
+  margin-bottom: 0.5cm;
+  margin-top: 0.5cm;
+  position: relative;
 }
-.sanina_textarea:focus {
-    outline: none;
+
+.page .content .column {
+  text-align: justify;
+  font-size: 15pt;
 }
-.sanin_text {
-    text-align: left;
+
+.page .content .column blockquote {
+  border-left: 2px solid #999999;
+  background: #dedede;
+  padding: 10px;
+  margin: 4px 20px;
+  clear: both;
+}
+
+.page .content .column img {
+  float: left;
+  margin: 10px;
+}
+
+.page .content .column p {
+  padding: 0 20px;
+  margin: 10px 0;
+}
+
+.page .content .column h1 {
+  padding: 0 20px;
+}
+
+.page .header {
+  text-align: center;
+  font-size: 18pt;
+  font-family: helvetica, arial;
+  padding: 20px 0 0;
+}
+
+.page .header hr,
+.page .footer hr {
+  width: 400px;
+}
+
+.page .footer {
+  text-align: center;
+}
+
+.page .footer span {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+#page_template {
+  display: none;
+}
+
+.enclosure {
+  border: 1px dashed black;
+}
+
+body {
+  background: rgb(204, 204, 204);
+}
+
+page {
+  background: #fbfbf8;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 0.5cm;
+  box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+}
+
+page[size="A4"] {
+  width: 42cm;
+  height: 59.4cm;
+}
+
+page[size="A4"][layout="landscape"] {
+  width: 29.7cm;
+  height: 21cm;
+}
+
+page[size="A3"] {
+  width: 29.7cm;
+  height: 42cm;
+}
+
+page[size="A3"][layout="landscape"] {
+  width: 42cm;
+  height: 29.7cm;
+}
+
+page[size="A5"] {
+    width: 42cm;
+    height: 59.4cm;
+}
+
+page[size="A5"][layout="landscape"] {
+  width: 21cm;
+  height: 14.8cm;
+}
+
+@media print {
+  body,
+  page {
+    margin: 0;
+    box-shadow: 0;
+  }
 }
