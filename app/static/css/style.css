@@ -1,3 +1,84 @@
+/* Add a black background color to the top navigation */
+.topnav {
+    background-color:  rgb(104, 104, 104);;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 50px;
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+  }
+  
+  /* Style the links inside the navigation bar */
+  .topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  /* Change the color of links on hover */
+  .topnav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /* Add a color to the active/current link */
+  .topnav a.active {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+
+/* The sidebar menu */
+.sidenav {
+    margin-top: 50px;
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 200px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: rgb(104, 104, 104); /* Black */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+  }
+  
+  /* The navigation menu links */
+  .sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #dddddd;
+    display: block;
+  }
+
+  .sidenav .sidebar-heading {
+    padding: 6px 8px 6px 16px;
+    color: #dddddd;
+    font-size: 25px;
+  }
+  
+  /* When you mouse over the navigation links, change their color */
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+  
+  /* Style page content */
+  .main {
+    margin-top: 50px;
+    margin-left: 200px; /* Same as the width of the sidebar */
+    padding: 0px 10px;
+  }
+  
+  /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+  @media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+  }
+
 .btn-circle { 
     width: 55px; 
     height: 55px; 
@@ -12,8 +93,8 @@
 }
 
 .page {
-  width: 612px;
-  height: 792px;
+    width: 42cm;
+    height: 59.4cm;
   /* margin: 20px; */
   margin-bottom: 0.5cm;
   margin-top: 0.5cm;
@@ -22,7 +103,7 @@
 
 .page .content .column {
   text-align: justify;
-  font-size: 10pt;
+  font-size: 15pt;
 }
 
 .page .content .column blockquote {
@@ -39,12 +120,12 @@
 }
 
 .page .content .column p {
-  padding: 0 10px;
+  padding: 0 20px;
   margin: 10px 0;
 }
 
 .page .content .column h1 {
-  padding: 0 10px;
+  padding: 0 20px;
 }
 
 .page .header {
@@ -82,7 +163,7 @@ body {
 }
 
 page {
-  background: white;
+  background: #fbfbf8;
   display: block;
   margin: 0 auto;
   margin-bottom: 0.5cm;
@@ -90,8 +171,8 @@ page {
 }
 
 page[size="A4"] {
-  width: 21cm;
-  height: 29.7cm;
+  width: 42cm;
+  height: 59.4cm;
 }
 
 page[size="A4"][layout="landscape"] {
@@ -110,8 +191,8 @@ page[size="A3"][layout="landscape"] {
 }
 
 page[size="A5"] {
-  width: 14.8cm;
-  height: 21cm;
+    width: 42cm;
+    height: 59.4cm;
 }
 
 page[size="A5"][layout="landscape"] {

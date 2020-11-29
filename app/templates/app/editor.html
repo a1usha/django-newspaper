@@ -7,26 +7,44 @@
     <link href="{% static 'css/style.css' %}" rel="stylesheet" >
 {% endblock extra_head %}
 
-{% block body_class %}body{% endblock body_class %}
+<!-- {% block body_class %}body{% endblock body_class %} -->
 
 {% block content %}
 
-    <div style ="position: fixed; bottom: 15px; right:15px;">
-        <a id="zoomInButton" class="btn btn-secondary btn-circle"><i class="fa fa-plus" aria-hidden="true"></i></a>
-        <a id="zoomOutButton" class="btn btn-secondary btn-circle""><i class="fa fa-minus" aria-hidden="true"></i></i></a>
+    <!-- Toolbar - top navbar -->
+    <div class="topnav">
+        <div class="d-flex justify-content-center" style="margin-left: 200px;">
+            <a class="active" href="#home">Save</a>
+            <a href="#">Export to</a>
+            <a href="#">Layout</a>
+            <a href="#">Profile</a>
+        </div>
     </div>
 
-    <div class="container">
 
+    <!-- Table of contents - left navbar -->
+    <div class="sidenav">
+        <div class="sidebar-heading">Newspaper name</div>
+        <a href="#">Article 1</a>
+        <a href="#">Article 2</a>
+        <a href="#">Article 3</a>
+        <a href="#">Article 4</a>
+    </div>
+    
+    <!-- Page content -->
+    <div class="main">
+
+        <!-- Loading spinner while newspaper generation happens -->
         <div class="d-flex justify-content-center">
             <div id='loading' class="spinner-grow" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
 
+        <!-- Editor div - where newspaper placed -->
+        <div id='editor' style="visibility: hidden; transform: scale(0.8);">
 
-        <div id='editor' style="visibility: hidden;">
-
+            <!-- Page template. Probably should be in other file -->
             <page size="A5" id="page_template">
                 <div class='header'>
                     This is a header
@@ -34,13 +52,89 @@
                 </div>
                 <div class='content'></div>
                 <div class='footer'>
+                    <hr>
                     <span>Page: </span>
                     This is the footer.
                 </div>
             </page>
 
-
+            <!-- Info which columnizer use to generate newspaper pages -->
             <div id="newsletterContent">
+                <h1>Lorem ipsum ne justo</h1>
+                <p>Bonorum has. His ut cibo quas tantas, vis ut probo adhuc definiebas, has at meis debet vulputate. No sed velit essent suavitate, in pro decore ceteros temporibus, usu in odio offendit theophrastus. Mel labore indoctum cu, ad soleat admodum
+                    delicatissimi sed, mei viris tritani ullamcorper eu. Ut vim simul aperiam.
+                </p>
+                <p>Blandit insolens constituto vix an. Has diam wisi in, <a href='javascript:;'>eum unum</a> repudiare no. Sit at virtute rationibus, qui vitae explicari cu. Vim ne singulis voluptatum, sed puto accusata salutandi ei. Ad mel civibus adversarium.</p>
+                <blockquote>
+                    <p>Ius mutat commune expetendis in. Nam et quas sensibus reprimique, vix no erat soluta suavitate. At mel eius dictas latine. Corrumpit inciderint reformidans sed no, no usu omnis utinam noluisse.</p>
+                </blockquote>
+                <p>Probo debet quaestio an eos, no mel assum iracundia delicatissimi, rebum facete utroque sed ex. Eu melius invidunt <img src="{% static 'images/painting3.jpg' %}"> repudiandae vix, eu paulo reformidans deterruisset duo, solum voluptaria
+                    efficiantur ea mel. Qui summo zzril alienum et. Eu est ferri iuvaret, mazim epicurei sententiae ut cum, modo reque intellegat ex vix. Vim eu tibique accusamus, quot electram at qui.</p>
+                <p>Eu eleifend repudiandae has. Mea eu ridens aliquam. Nisl <a href='javascript:;'>aeque sit ut</a>, posse dolor utinam cum in. Ad timeam sapientem eos, et eripuit inermis nam. Eos integre voluptaria ne, iriure concludaturque ut eum.</p>
+                <p>Sit et, an ius nihil apeirian. Eu posse tempor iuvaret cum. No diam dolor sea, postea mnesarchum ne ius, vel no utinam ignota dolores. Malis suscipit accusamus his ne, utinam <a href='javascript:;'>assentior
+                        prodesset</a> ea eam, facer partem antiopam et cum.</p>
+                <p>Vis erant intellegat in. Soleat legere no ius, usu ex laoreet molestie. Sit eu sint inermis. Ea zzril scribentur pro.</p>
+                <h1>Tempor essent appetere</h1>
+                <p>Ius mutat commune expetendis in. Nam et quas sensibus reprimique, vix no erat soluta suavitate. At mel eius dictas latine. Corrumpit inciderint reformidans sed no, no usu omnis utinam noluisse.</p>
+                <p>Sit et, an ius nihil apeirian. Eu posse tempor iuvaret cum. No diam dolor sea, postea mnesarchum ne ius, vel no utinam <a href='javascript:;'>ignota dolores</a>. Malis suscipit accusamus his ne, utinam assentior prodesset ea eam, facer
+                    partem antiopam et cum.</p>
+                <p class='dontsplit'>Blandit insolens constituto vix an. Has diam wisi in, eum unum repudiare no. Sit at virtute rationibus, qui vitae explicari cu. Vim ne singulis voluptatum, sed puto accusata salutandi ei. Ad mel civibus adversarium.</p>
+                <p>Per ne solum vivendo, fabulas dolorem vivendo in pro. Nec duis ignota cotidieque no, an per possit nostrum. Pro detraxit definitionem eu. Vivendo officiis no nam, eu has reque maiestatis percipitur, dolore reprimique accommodare cum ad.
+                    No utinam voluptua oportere pri, augue sonet dicant ei sea.</p>
+                <p>Probo debet quaestio an eos, no mel assum iracundia delicatissimi, rebum facete utroque sed ex. Eu melius invidunt repudiandae vix, eu paulo <a href='javascript:;'>reformidans</a> deterruisset duo, solum voluptaria efficiantur ea mel.
+                    Qui summo zzril alienum et. Eu est ferri iuvaret, mazim epicurei sententiae ut cum, modo reque intellegat ex vix. Vim eu tibique accusamus, quot electram at qui.</p>
+                <p>Ex iisque eleifend periculis has. Sit aeterno virtute partiendo ei, eam nonumy bonorum adolescens ad. Ut nec suas vocent ornatus, cetero legendos constituam mea ea, pri cu delenit iracundia. Mundi decore nec te.
+                </p>
+                <h1>Lorem ipsum ne justo</h1>
+                <p>Bonorum has. His ut cibo quas tantas, vis ut probo adhuc definiebas, has at meis debet vulputate. No sed velit essent suavitate, in pro decore ceteros temporibus, usu in odio offendit theophrastus. Mel labore indoctum cu, ad soleat admodum
+                    delicatissimi sed, mei viris tritani ullamcorper eu. Ut vim simul aperiam.
+                </p>
+                <p>Blandit insolens constituto vix an. Has diam wisi in, <a href='javascript:;'>eum unum</a> repudiare no. Sit at virtute rationibus, qui vitae explicari cu. Vim ne singulis voluptatum, sed puto accusata salutandi ei. Ad mel civibus adversarium.</p>
+                <blockquote>
+                    <p>Ius mutat commune expetendis in. Nam et quas sensibus reprimique, vix no erat soluta suavitate. At mel eius dictas latine. Corrumpit inciderint reformidans sed no, no usu omnis utinam noluisse.</p>
+                </blockquote>
+                <p>Probo debet quaestio an eos, no mel assum iracundia delicatissimi, rebum facete utroque sed ex. Eu melius invidunt <img src="{% static 'images/painting3.jpg' %}"> repudiandae vix, eu paulo reformidans deterruisset duo, solum voluptaria
+                    efficiantur ea mel. Qui summo zzril alienum et. Eu est ferri iuvaret, mazim epicurei sententiae ut cum, modo reque intellegat ex vix. Vim eu tibique accusamus, quot electram at qui.</p>
+                <p>Eu eleifend repudiandae has. Mea eu ridens aliquam. Nisl <a href='javascript:;'>aeque sit ut</a>, posse dolor utinam cum in. Ad timeam sapientem eos, et eripuit inermis nam. Eos integre voluptaria ne, iriure concludaturque ut eum.</p>
+                <p>Sit et, an ius nihil apeirian. Eu posse tempor iuvaret cum. No diam dolor sea, postea mnesarchum ne ius, vel no utinam ignota dolores. Malis suscipit accusamus his ne, utinam <a href='javascript:;'>assentior
+                        prodesset</a> ea eam, facer partem antiopam et cum.</p>
+                <p>Vis erant intellegat in. Soleat legere no ius, usu ex laoreet molestie. Sit eu sint inermis. Ea zzril scribentur pro.</p>
+                <h1>Tempor essent appetere</h1>
+                <p>Ius mutat commune expetendis in. Nam et quas sensibus reprimique, vix no erat soluta suavitate. At mel eius dictas latine. Corrumpit inciderint reformidans sed no, no usu omnis utinam noluisse.</p>
+                <p>Sit et, an ius nihil apeirian. Eu posse tempor iuvaret cum. No diam dolor sea, postea mnesarchum ne ius, vel no utinam <a href='javascript:;'>ignota dolores</a>. Malis suscipit accusamus his ne, utinam assentior prodesset ea eam, facer
+                    partem antiopam et cum.</p>
+                <p class='dontsplit'>Blandit insolens constituto vix an. Has diam wisi in, eum unum repudiare no. Sit at virtute rationibus, qui vitae explicari cu. Vim ne singulis voluptatum, sed puto accusata salutandi ei. Ad mel civibus adversarium.</p>
+                <p>Per ne solum vivendo, fabulas dolorem vivendo in pro. Nec duis ignota cotidieque no, an per possit nostrum. Pro detraxit definitionem eu. Vivendo officiis no nam, eu has reque maiestatis percipitur, dolore reprimique accommodare cum ad.
+                    No utinam voluptua oportere pri, augue sonet dicant ei sea.</p>
+                <p>Probo debet quaestio an eos, no mel assum iracundia delicatissimi, rebum facete utroque sed ex. Eu melius invidunt repudiandae vix, eu paulo <a href='javascript:;'>reformidans</a> deterruisset duo, solum voluptaria efficiantur ea mel.
+                    Qui summo zzril alienum et. Eu est ferri iuvaret, mazim epicurei sententiae ut cum, modo reque intellegat ex vix. Vim eu tibique accusamus, quot electram at qui.</p>
+                <p>Ex iisque eleifend periculis has. Sit aeterno virtute partiendo ei, eam nonumy bonorum adolescens ad. Ut nec suas vocent ornatus, cetero legendos constituam mea ea, pri cu delenit iracundia. Mundi decore nec te.
+                </p>
+                <h1>Lorem ipsum ne justo</h1>
+                <p>Bonorum has. His ut cibo quas tantas, vis ut probo adhuc definiebas, has at meis debet vulputate. No sed velit essent suavitate, in pro decore ceteros temporibus, usu in odio offendit theophrastus. Mel labore indoctum cu, ad soleat admodum
+                    delicatissimi sed, mei viris tritani ullamcorper eu. Ut vim simul aperiam.
+                </p>
+                <p>Blandit insolens constituto vix an. Has diam wisi in, <a href='javascript:;'>eum unum</a> repudiare no. Sit at virtute rationibus, qui vitae explicari cu. Vim ne singulis voluptatum, sed puto accusata salutandi ei. Ad mel civibus adversarium.</p>
+                <blockquote>
+                    <p>Ius mutat commune expetendis in. Nam et quas sensibus reprimique, vix no erat soluta suavitate. At mel eius dictas latine. Corrumpit inciderint reformidans sed no, no usu omnis utinam noluisse.</p>
+                </blockquote>
+                <p>Probo debet quaestio an eos, no mel assum iracundia delicatissimi, rebum facete utroque sed ex. Eu melius invidunt <img src="{% static 'images/painting3.jpg' %}"> repudiandae vix, eu paulo reformidans deterruisset duo, solum voluptaria
+                    efficiantur ea mel. Qui summo zzril alienum et. Eu est ferri iuvaret, mazim epicurei sententiae ut cum, modo reque intellegat ex vix. Vim eu tibique accusamus, quot electram at qui.</p>
+                <p>Eu eleifend repudiandae has. Mea eu ridens aliquam. Nisl <a href='javascript:;'>aeque sit ut</a>, posse dolor utinam cum in. Ad timeam sapientem eos, et eripuit inermis nam. Eos integre voluptaria ne, iriure concludaturque ut eum.</p>
+                <p>Sit et, an ius nihil apeirian. Eu posse tempor iuvaret cum. No diam dolor sea, postea mnesarchum ne ius, vel no utinam ignota dolores. Malis suscipit accusamus his ne, utinam <a href='javascript:;'>assentior
+                        prodesset</a> ea eam, facer partem antiopam et cum.</p>
+                <p>Vis erant intellegat in. Soleat legere no ius, usu ex laoreet molestie. Sit eu sint inermis. Ea zzril scribentur pro.</p>
+                <h1>Tempor essent appetere</h1>
+                <p>Ius mutat commune expetendis in. Nam et quas sensibus reprimique, vix no erat soluta suavitate. At mel eius dictas latine. Corrumpit inciderint reformidans sed no, no usu omnis utinam noluisse.</p>
+                <p>Sit et, an ius nihil apeirian. Eu posse tempor iuvaret cum. No diam dolor sea, postea mnesarchum ne ius, vel no utinam <a href='javascript:;'>ignota dolores</a>. Malis suscipit accusamus his ne, utinam assentior prodesset ea eam, facer
+                    partem antiopam et cum.</p>
+                <p class='dontsplit'>Blandit insolens constituto vix an. Has diam wisi in, eum unum repudiare no. Sit at virtute rationibus, qui vitae explicari cu. Vim ne singulis voluptatum, sed puto accusata salutandi ei. Ad mel civibus adversarium.</p>
+                <p>Per ne solum vivendo, fabulas dolorem vivendo in pro. Nec duis ignota cotidieque no, an per possit nostrum. Pro detraxit definitionem eu. Vivendo officiis no nam, eu has reque maiestatis percipitur, dolore reprimique accommodare cum ad.
+                    No utinam voluptua oportere pri, augue sonet dicant ei sea.</p>
+                <p>Probo debet quaestio an eos, no mel assum iracundia delicatissimi, rebum facete utroque sed ex. Eu melius invidunt repudiandae vix, eu paulo <a href='javascript:;'>reformidans</a> deterruisset duo, solum voluptaria efficiantur ea mel.
+                    Qui summo zzril alienum et. Eu est ferri iuvaret, mazim epicurei sententiae ut cum, modo reque intellegat ex vix. Vim eu tibique accusamus, quot electram at qui.</p>
+                <p>Ex iisque eleifend periculis has. Sit aeterno virtute partiendo ei, eam nonumy bonorum adolescens ad. Ut nec suas vocent ornatus, cetero legendos constituam mea ea, pri cu delenit iracundia. Mundi decore nec te.
+                </p>
                 <h1>Lorem ipsum ne justo</h1>
                 <p>Bonorum has. His ut cibo quas tantas, vis ut probo adhuc definiebas, has at meis debet vulputate. No sed velit essent suavitate, in pro decore ceteros temporibus, usu in odio offendit theophrastus. Mel labore indoctum cu, ad soleat admodum
                     delicatissimi sed, mei viris tritani ullamcorper eu. Ut vim simul aperiam.
@@ -70,6 +164,14 @@
         </div>
     </div>
 
+
+    <!-- Page scale buttons -->
+    <div style ="position: fixed; bottom: 15px; right:15px;">
+        <a id="zoomOutButton" class="btn btn-secondary btn-circle""><i class="fa fa-minus" aria-hidden="true"></i></i></a>
+        <a id="zoomInButton" class="btn btn-secondary btn-circle"><i class="fa fa-plus" aria-hidden="true"></i></a>
+    </div>
+
+   
 {% endblock content %}
 
 {% block script %}
@@ -92,7 +194,7 @@
 
     <script>
         $(function() {
-            var content_height = 652; // the height of the content, discluding the header/footer
+            var content_height = 2078; // the height of the content, discluding the header/footer
             var page = 1; // the beginning page number to show in the footer
             function buildNewsletter() {
 
@@ -108,7 +210,7 @@
 
                     // here is the columnizer magic
                     $('#newsletterContent').columnize({
-                        columns: 3,
+                        columns: 4,
                         target: ".page:last .content",
                         overflow: {
                             height: content_height,
