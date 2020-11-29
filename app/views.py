@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from .models import Newspaper, Article
+
 
 def loginView(request):
     if request.method == "POST":
@@ -23,6 +25,11 @@ def loginView(request):
 class EditorView(LoginRequiredMixin, TemplateView):
     login_url = "/auth/"
     template_name = "app/editor.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(EditorView, self).get_context_data(**kwargs)
+        context['articles'] = Newspaper.objects.first().article_set.all()
+        return context
     
 
 def index(request):
