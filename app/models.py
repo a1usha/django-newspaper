@@ -10,7 +10,7 @@ class Newspaper(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE) 
 
     def __str__(self):
-        return "{} created by {}".format(self.title, self.author)
+        return "'{}' created by {}".format(self.title, self.author)
 
 
 class Article(models.Model):
@@ -19,5 +19,8 @@ class Article(models.Model):
     author = models.CharField(max_length=50)
     date_created = models.DateField(default=timezone.now)
     newspaper = models.ForeignKey(Newspaper, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "'{}' written by {}".format(self.title, self.author)
 
 

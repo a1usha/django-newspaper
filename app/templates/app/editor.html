@@ -11,13 +11,15 @@
 
 {% block content %}
 
+    <!-- TODO navbars from bootstrap -->
     <!-- Toolbar - top navbar -->
     <div class="topnav">
         <div class="d-flex justify-content-center" style="margin-left: 200px;">
             <a class="active" href="#home">Save</a>
             <a href="#">Export to</a>
             <a href="#">Layout</a>
-            <a href="#">Profile</a>
+            <a href="{% url 'profile' %}">{{ user.username }}</a>
+            <a href="{% url 'logout' %}">Logout</a>
         </div>
     </div>
 
@@ -65,7 +67,7 @@
 
                 {% for article in articles %}
                     <h1>{{ article.title }}</h1>
-                    <p>By {{ article.author }} at {{ article.date_created }}</p>
+                    <p><i>By {{ article.author }} at {{ article.date_created }}</i></p>
                     <p>{{ article.content }}</p>
                 {% endfor %}
 

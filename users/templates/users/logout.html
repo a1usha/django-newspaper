@@ -1,0 +1,17 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+    <link href="{% static 'css/signin.css' %}" rel="stylesheet">
+{% endblock extra_head %}
+
+{% block content %}
+    <div class="content-section"
+        <h2 class="h3 mb-3 font-weight-normal">You have been logged out</h2>
+        <div class="pt-3">
+            <small class="text-muted">
+                <a class="ml-2" href="{% url 'login' %}">Log In Again</a>
+            </small>
+        </div>
+    </div>
+{% endblock content %}
