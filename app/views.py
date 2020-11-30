@@ -23,5 +23,9 @@ class EditorView(LoginRequiredMixin, TemplateView):
         return context
     
 @login_required
-def index(request):
+def editor(request):
     return redirect('app:app-editor')
+
+
+def index(request):
+    return render(request, 'app/index.html')

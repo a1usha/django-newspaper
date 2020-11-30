@@ -3,17 +3,130 @@
 {% load static %}
 
 {% block extra_head %}
-    <link href="{% static 'css/signin.css' %}" rel="stylesheet">
+    <link href="{% static 'css/index.css' %}" rel="stylesheet">
+    <link href="{% static 'css/profile.css' %}" rel="stylesheet">
 {% endblock extra_head %}
 
 {% block content %}
-    <div class="content-section">
-        <div class="media">
-            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}" style="transform: scale(0.8);">
-            <div class="media-body">
-              <h2 class="account-heading mt-3">{{ user.username }}</h2>
-              <p class="text-secondary" style="width: 120px;">Newspapers: {{ user.newspaper_set.count }}</p>
+
+    <div class="h-100 container hide-scrollbar"  style="overflow-y: scroll;">
+
+        <!-- Header - where newspaper editor placed -->
+        <header class="blog-header py-3">
+            <div class="row flex-nowrap justify-content-center align-items-center">
+                <a class="blog-header-logo text-dark" href="https://getbootstrap.com/docs/4.0/examples/blog/#">Newspaper Editor</a>
             </div>
+        </header>
+
+
+        <!-- Buttons of header -->
+        <div class="nav-scroller py-1 mb-4">
+            <nav class="nav d-flex justify-content-center">
+            <a class="p-2 text-muted" href="{% url 'app:index' %}">Home</a>
+            <a class="p-2 text-muted" href="{% url 'logout' %}">Logout</a>
+            <a class="p-2 text-muted" href="{% url 'register' %}">Sign Up</a>
+            </nav>
+        </div>
+
+        <!-- Profile card -->
+        <!-- https://bbbootstrap.com/snippets/bootstrap-sidebar-user-profile-62301382 -->
+        <div class="row mt-3">
+            <div class="col-md-4 mr-5">
+                <div class="card p-3">
+                    <div class="d-flex align-items-center">
+                        <div class="image"> <img src="{{ user.profile.image.url }}" class="rounded" width="155" height="155"> </div>
+                        <div class="ml-3 w-100">
+
+                            {% if user.get_full_name != '' %}
+                                <h5 class="mb-3 mt-0">{{ user.get_full_name }}</h5> 
+                            {% else %}
+                                <h5 class="mb-3 mt-0">{{ user.username }}</h5> 
+                            {% endif %}
+
+                            <div class="p-2 mt-2 bg-primary d-flex justify-content-center rounded text-white stats">
+                                <div class="d-flex flex-column"> <span class="articles">Newspapers</span> <span class="number1">{{ user.newspaper_set.count }}</span></div>
+                            </div>
+
+                            <div class="button mt-2 d-flex flex-row align-items-center"> <button class="btn btn-sm btn-outline-primary w-100" onclick="showEdit()">Edit profile</button></div>
+                        </div>
+                    </div>
+
+                    <!-- Display message that account was updated -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="mt-4 alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <!-- Edit user preferenes form (hidden by default) -->
+                    <div class="d-none align-items-center mt-4" id="editProfileDiv">
+                        <div class="w-100">
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <fieldset class="form-group">
+                                    {{ u_form|crispy  }}
+                                    {{ p_form|crispy  }}
+                                </fieldset>
+
+                                <div class="button d-flex flex-row align-items-center"> <button class="btn btn-sm btn-outline-primary w-100" type="submit">Update</button></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Users newspapers cards -->
+            <div class="col-md-7 mb-5">
+                {% if user.newspaper_set.count == 0 %}
+                    <div class="nsp-card p-3 mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="ml-3 w-100">
+                                <p class="mt-0">You don't have any newspapers yet</p> 
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    {% for newspaper in user.newspaper_set.all %}
+                            <div class="nsp-card p-3 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="w-100">
+                                        <h5 class="mb-3 mt-0">{{ newspaper.title }}</h5> 
+                                        
+                                        <div class="p-2 mt-2 bg-primary d-flex justify-content-center rounded text-white stats">
+                                            <div class="d-flex flex-column ml-2 mr-2"> <span class="articles">Articles</span> <span class="number1">{{ newspaper.article_set.count }}</span></div>
+                                            <div class="d-flex flex-column ml-2 mr-2"> <span class="articles">Pages</span> <span class="number1">5</span></div>
+                                        </div>
+
+                                        <div class="button mt-2 d-flex flex-row align-items-center"> 
+                                            <button class="btn btn-sm btn-outline-primary w-100 mr-1">Open newspaper</button>
+                                            <button class="btn btn-sm btn-outline-primary w-100 ml-1">Delete newspaper</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        
+        <!-- Footer with credentials -->
+        <div class="row justify-content-center">
+            <footer class="footer">
+                <p class="mb-0">Newspaper editor app made for NSU Software Development course</p>
+                <p class="mb-0">Created by Aleksandr Ushaev and Vladislav Nikiforov</p>
+            </footer>
         </div>
     </div>
 {% endblock content %}
+
+{% block script %}
+    <script>
+        function showEdit() {
+            $("#editProfileDiv").addClass("d-flex").removeClass("d-none");
+        }
+    </script>
+{% endblock script %}

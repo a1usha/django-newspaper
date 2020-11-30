@@ -1,0 +1,56 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link href="{% static 'css/index.css' %}" rel="stylesheet">
+{% endblock extra_head %}
+
+{% block content %}
+
+    <div class="h-100 container">
+
+        <!-- Header - where newspaper editor placed -->
+        <header class="blog-header py-3">
+            <div class="row flex-nowrap justify-content-center align-items-center">
+                <a class="blog-header-logo text-dark" href="https://getbootstrap.com/docs/4.0/examples/blog/#">Newspaper Editor</a>
+            </div>
+        </header>
+
+
+        <!-- Buttons of header -->
+        <div class="nav-scroller py-1 mb-2">
+            <nav class="nav d-flex justify-content-center">
+            
+            {% if user.is_authenticated %}
+                <a class="p-2 text-muted" href="{% url 'profile' %}">Profile</a>
+                <a class="p-2 text-muted" href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a class="p-2 text-muted" href="{% url 'login' %}">Login</a>
+            {% endif %}
+
+            <a class="p-2 text-muted" href="{% url 'register' %}">Sign Up</a>
+            </nav>
+        </div>
+
+
+        <!-- Text with brief desription of application -->
+        <main role="main" class="container" style="padding: 20%;">
+            <h1>Cover your page.</h1>
+            <p class="lead">
+                Cover is a one-page template for building simple and beautiful home pages. 
+                Download, edit the text, and add your own fullscreen background photo to make it your own.
+            </p>
+        </main>
+
+        
+        <!-- Footer with credentials -->
+        <div class="row justify-content-center">
+            <footer class="footer">
+                <p class="mb-0">Newspaper editor app made for NSU Software Development course</p>
+                <p class="mb-0">Created by Aleksandr Ushaev and Vladislav Nikiforov</p>
+            </footer>
+        </div>
+
+    </div>
+
+{% endblock content %}
