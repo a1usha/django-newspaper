@@ -38,12 +38,12 @@ ul {
 
 .content-section {
   width: 100%;
-  max-width: 300px;
+  max-width: 600px;
 }
 
 .form-group {
   width: 100%;
-  max-width: 300px;
+  max-width: 600px;
   padding: 0px;
   margin: 0 auto;
 }
@@ -54,7 +54,7 @@ ul {
 
 .form-group button, a {
   width: 100%;
-  max-width: 300px;
+  max-width: 600px;
 }
 
 .form-group .checkbox {

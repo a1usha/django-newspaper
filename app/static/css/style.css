@@ -34,7 +34,7 @@
 
 /* The sidebar menu */
 .sidenav {
-    margin-top: 50px;
+    margin-top: 13px;
     height: 100%; /* Full-height: remove this if you want "auto" height */
     width: 200px; /* Set the width of the sidebar */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
@@ -130,14 +130,14 @@
 
 .page .header {
   text-align: center;
-  font-size: 18pt;
+  font-size: 15pt;
   font-family: helvetica, arial;
   padding: 20px 0 0;
 }
 
 .page .header hr,
 .page .footer hr {
-  width: 400px;
+  width: 1500px;
 }
 
 .page .footer {
