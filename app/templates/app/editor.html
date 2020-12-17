@@ -76,7 +76,7 @@
                 {% for article in object.article_set.all %}
                     <h1>{{ article.title }}</h1>
                     <p><i>By {{ article.author }} at {{ article.date_created }}</i></p>
-                    <p>{{ article.content }}</p>
+                    <p>{{ article.content|safe }}</p>
                 {% endfor %}
 
 

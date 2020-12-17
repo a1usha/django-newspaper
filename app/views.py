@@ -68,7 +68,7 @@ class EditorDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
         return self.request.user == newspaper.author
 
 
-# Create newspaper
+# Create article
 class ArticleCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Article
     fields = ['title', 'content', 'author', 'date_created']
