@@ -7,7 +7,7 @@
 {% endblock extra_head %}
 
 {% block content %}
-    <div class="content-section wide">
+    <div class="content-section wide mt-5">
         <form id="main-form" method="POST">
             {% csrf_token %}
             <fieldset class="form-group wide">
@@ -17,9 +17,9 @@
                 {{ form|crispy  }}
             </fieldset>
             <div class="mt-3 form-group">
-                <input class="btn btn-outline-primary w-100 mb-2" type="submit" name="to_profile" value='Create and go to Profile'>
-                <input class="btn btn-outline-primary w-100 mb-2" type="submit" name="to_editor" value='Create and go to Editor'>
-                <a class="btn btn-outline-secondary" href="{% url 'profile' %}">Cancel</a>
+                <input class="btn btn-outline-primary w-50 mb-2" type="submit" name="to_profile" value='Create and go to Profile'>
+                <input class="btn btn-outline-primary w-50 mb-2" type="submit" name="to_editor" value='Create and go to Editor'>
+                <a class="btn btn-outline-secondary w-50 mb-3" href="{% url 'profile' %}">Cancel</a>
             </div>
         </form> 
     </div>

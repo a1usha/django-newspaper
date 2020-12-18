@@ -146,3 +146,18 @@ AWS_DEFAULT_ACL = None
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
+
+CKEDITOR_CONFIGS = {
+    'custom_ckeditor': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ],
+            ['NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['TextColor', 'BGColor'], 
+            ['Link', 'Unlink'],
+            ['Find', 'Replace'],
+            ['RemoveFormat']
+        ]
+    },
+}

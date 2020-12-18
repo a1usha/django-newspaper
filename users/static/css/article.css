@@ -39,6 +39,7 @@ ul {
 .content-section {
   width: 100%;
   max-width: 837px;
+  height: 100%;
 }
 
 .form-group {
@@ -117,20 +118,3 @@ ul {
 #image_logo {
   transform: scale(0.9);
 }
-
-/* #image_logo {
-  transform: rotate(360deg);
-  -webkit-transform: rotate(360deg);
-}
-#image_logo {
-		-webkit-animation: rotation 15s infinite linear;
-}
-
-@-webkit-keyframes rotation {
-		from {
-				-webkit-transform: rotate(0deg);
-		}
-		to {
-				-webkit-transform: rotate(359deg);
-		}
-} */
