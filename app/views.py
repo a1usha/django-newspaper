@@ -95,6 +95,57 @@ class ArticleCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
     # Check if it is a user's newspaper
     def has_permission(self):
         return self.request.user == self.newspaper.author
+
+
+# Edit article
+class ArticleUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    model = Article
+    fields = ['title', 'content', 'author', 'date_created']
+
+    # Function to take newspaper by id from URL
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Overridden so we can make sure the `newspaper` instance exists
+        before going any further.
+        """
+        self.newspaper = get_object_or_404(Newspaper, pk=kwargs['newspaper_id'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('app:editor', kwargs={'pk': self.newspaper.id})
+
+    def form_valid(self, form):
+        form.instance.newspaper = self.newspaper
+        return super().form_valid(form)
+
+    # Check if it is a user's newspaper
+    def has_permission(self):
+        return self.request.user == self.newspaper.author
+
+
+# Delete article
+class ArticleDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    model = Article
+
+    # Function to take newspaper by id from URL
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Overridden so we can make sure the `newspaper` instance exists
+        before going any further.
+        """
+        self.newspaper = get_object_or_404(Newspaper, pk=kwargs['newspaper_id'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('app:editor', kwargs={'pk': self.newspaper.id})
+
+    def form_valid(self, form):
+        form.instance.newspaper = self.newspaper
+        return super().form_valid(form)
+
+    # Check if it is a user's newspaper
+    def has_permission(self):
+        return self.request.user == self.newspaper.author
     
 
 def index(request):

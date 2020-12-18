@@ -5,7 +5,9 @@ from .views import (
     EditorCreateView,
     EditorUpdateView,
     EditorDeleteView,
-    ArticleCreateView
+    ArticleCreateView,
+    ArticleUpdateView,
+    ArticleDeleteView,
 )
 
 app_name = "app"
@@ -16,4 +18,6 @@ urlpatterns = [
     path("newspaper/<int:pk>/update/", EditorUpdateView.as_view(), name='editor-update'),
     path("newspaper/<int:pk>/delete/", EditorDeleteView.as_view(), name='editor-delete'),
     path("newspaper/<int:newspaper_id>/newarticle/", ArticleCreateView.as_view(), name='article-create'),
+    path("newspaper/<int:newspaper_id>/article/<int:pk>/update", ArticleUpdateView.as_view(), name='article-update'),
+    path("newspaper/<int:newspaper_id>/article/<int:pk>/delete", ArticleDeleteView.as_view(), name='article-delete'),
 ]

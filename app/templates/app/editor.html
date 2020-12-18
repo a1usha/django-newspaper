@@ -35,7 +35,7 @@
                 {% if user.get_full_name != '' %}
                     <a href="{% url 'profile' %}">{{ user.get_full_name }}</a>
                 {% else %}
-                    <a class="mb-3 mt-0">{{ user.username }}</a> 
+                    <a href="{% url 'profile' %}">{{ user.username }}</a> 
                 {% endif %}
             </li>
 
@@ -45,9 +45,19 @@
                 <ul class="collapse list-unstyled" id="homeSubmenu">
 
                     {% for article in object.article_set.all %}
-                        <li>
-                            <a href="#">{{ article.title }}</a>
-                        </li>
+                        <!-- <li>
+                            <a href="{% url 'app:article-update' object.id article.id %}">{{ article.title }}</a>
+                        </li> -->
+
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" href="#" data-toggle="dropdown">{{ article.title }}</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{% url 'app:article-update' object.id article.id %}">Edit article</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'app:article-delete' object.id article.id %}">Delete article</a></li>
+                                </ul>
+                            </li>
+                        </ul>
                     {% endfor %}
 
                 </ul>
@@ -62,7 +72,7 @@
         <!-- Add article button -->
         <ul class="list-unstyled CTAs">
             <li>
-                <a href="{% url 'app:article-create' object.id %}" class="btn btn-outline-primary">Add article</a>
+                <a href="{% url 'app:article-create' object.id %}" class="btn btn-outline-secondary">Add article</a>
             </li>
         </ul>
 

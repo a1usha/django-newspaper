@@ -156,6 +156,10 @@ a.article:hover {
     color: #fff !important;
 }
 
+.dropdown-toggle {
+    white-space: normal;
+}
+
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */
@@ -191,6 +195,7 @@ a.article:hover {
 .page .content .column {
   text-align: justify;
   font-size: 15pt;
+  word-wrap: break-word;
 }
 
 .page .content .column blockquote {
@@ -244,6 +249,7 @@ a.article:hover {
 .enclosure {
   border: 1px dashed black;
 }
+
 
 page {
     background: #fbfbf8;
