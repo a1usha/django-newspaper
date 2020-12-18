@@ -1,0 +1,152 @@
+{% extends "app/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+    <script src="{% static 'bundles/columnizer/src/jquery.js' %}"></script>
+    <script src="{% static 'bundles/columnizer/src/jquery.columnizer.min.js' %}" type="text/javascript" charset="utf-8"></script>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" >
+{% endblock extra_head %}
+
+
+{% block content %}
+
+    <!-- TODO navbars from bootstrap -->
+    <!-- Toolbar - top navbar -->
+    <div class="topnav">
+        <div class="d-flex justify-content-center" style="margin-left: 200px;">
+
+            <a href="{% url 'app:index' %}">Home</a>
+
+            {% if user.get_full_name != '' %}
+                <a href="{% url 'profile' %}">{{ user.get_full_name }}</a>
+            {% else %}
+                <a href="{% url 'profile' %}">{{ user.username }}</a>
+            {% endif %}
+
+            <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'app:article-create' object.id %}" style="background-color: cadetblue;">Add article</a>
+        </div>
+    </div>
+
+
+    <!-- Table of contents - left navbar -->
+    <div class="sidenav">
+        <hr>
+        <div class="sidebar-heading">{{ object.title }}</div>
+        <hr>
+
+        {% for article in object.article_set.all %}
+            <a href="#">{{ article.title }}</a>
+            <hr>
+        {% endfor %}
+
+    </div>
+
+    
+    <!-- Page content -->
+    <div class="main">
+
+        <!-- Loading spinner while newspaper generation happens -->
+        <div class="d-flex justify-content-center">
+            <div id='loading' class="spinner-grow" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Editor div - where newspaper placed -->
+        <div id='editor' style="visibility: hidden; transform: scale(0.8);">
+
+            <!-- Page template. Probably should be in other file -->
+            <page size="A5" id="page_template">
+                <div class='header'>
+                    {{ object.title }}
+                    <hr>
+                </div>
+                <div class='content'></div>
+                <div class='footer'>
+                    <hr>
+                    <span>Page: </span>
+                    {{ object.date_posted }}
+                </div>
+            </page>
+
+            <!-- Info which columnizer use to generate newspaper pages -->
+            <div id="newsletterContent">
+
+                {% for article in object.article_set.all %}
+                    <h1>{{ article.title }}</h1>
+                    <p><i>By {{ article.author }} at {{ article.date_created }}</i></p>
+                    <p>{{ article.content|safe }}</p>
+                {% endfor %}
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Page scale buttons -->
+    <div style ="position: fixed; bottom: 15px; right:15px;">
+        <a id="zoomOutButton" class="btn btn-secondary btn-circle""><i class="fa fa-minus" aria-hidden="true"></i></i></a>
+        <a id="zoomInButton" class="btn btn-secondary btn-circle"><i class="fa fa-plus" aria-hidden="true"></i></a>
+    </div>
+
+   
+{% endblock content %}
+
+{% block script %}
+
+    <script>
+        var zoom = 1;
+        var zoomStep = 0.2;
+
+        document.getElementById("zoomInButton").addEventListener("click", function() {
+          zoom += zoomStep;
+          document.getElementById("editor").style.transform = "scale(" + zoom + ")";
+        });
+        document.getElementById("zoomOutButton").addEventListener("click", function() {
+          if (zoom > zoomStep) {
+            zoom -= zoomStep;
+            document.getElementById("editor").style.transform = "scale(" + zoom + ")";
+          }
+        });
+    </script>
+
+    <script>
+        $(function() {
+            var content_height = 2070; // the height of the content, discluding the header/footer
+            var page = 1; // the beginning page number to show in the footer
+            function buildNewsletter() {
+
+                if ($('#newsletterContent').contents().length > 0) {
+                    // when we need to add a new page, use a jq object for a template
+                    // or use a long HTML string, whatever your preference
+                    $page = $("#page_template").clone().addClass("page").css("display", "block");
+
+                    // fun stuff, like adding page numbers to the footer
+                    $page.find(".footer span").append(page);
+                    $("#editor").append($page);
+                    page++;
+
+                    // here is the columnizer magic
+                    $('#newsletterContent').columnize({
+                        columns: 4,
+                        target: ".page:last .content",
+                        overflow: {
+                            height: content_height,
+                            id: "#newsletterContent",
+                            doneFunc: function() {
+                                console.log("done with page");
+                                buildNewsletter();
+                            }
+                        }
+                    });
+                }
+                $('#loading').hide();
+                $('#editor').css("visibility", "visible");
+            }
+
+            setTimeout(buildNewsletter, 1000);
+        });
+    </script>
+{% endblock script %}

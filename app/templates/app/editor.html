@@ -4,48 +4,81 @@
 {% block extra_head %}
     <script src="{% static 'bundles/columnizer/src/jquery.js' %}"></script>
     <script src="{% static 'bundles/columnizer/src/jquery.columnizer.min.js' %}" type="text/javascript" charset="utf-8"></script>
-    <link href="{% static 'css/style.css' %}" rel="stylesheet" >
+    <link href="{% static 'css/editor.css' %}" rel="stylesheet" >
+
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">  
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
 {% endblock extra_head %}
 
+{% block body_class %}
+{% endblock %}
 
 {% block content %}
 
-    <!-- TODO navbars from bootstrap -->
-    <!-- Toolbar - top navbar -->
-    <div class="topnav">
-        <div class="d-flex justify-content-center" style="margin-left: 200px;">
+<div class="wrapper">
 
-            <a href="{% url 'app:index' %}">Home</a>
+    <!-- Sidebar -->
+    <nav id="sidebar">
 
-            {% if user.get_full_name != '' %}
-                <a href="{% url 'profile' %}">{{ user.get_full_name }}</a>
-            {% else %}
-                <a href="{% url 'profile' %}">{{ user.username }}</a>
-            {% endif %}
-
-            <a href="{% url 'logout' %}">Logout</a>
-            <a href="{% url 'app:article-create' object.id %}" style="background-color: cadetblue;">Add article</a>
+        <!-- Newspaper name -->
+        <div class="sidebar-header">
+            <h3>{{ object.title }}</h3>
         </div>
-    </div>
 
+        <ul class="list-unstyled components">
+            <!-- User profile -->
+            <li >
+                {% if user.get_full_name != '' %}
+                    <a href="{% url 'profile' %}">{{ user.get_full_name }}</a>
+                {% else %}
+                    <a class="mb-3 mt-0">{{ user.username }}</a> 
+                {% endif %}
+            </li>
 
-    <!-- Table of contents - left navbar -->
-    <div class="sidenav">
-        <hr>
-        <div class="sidebar-heading">{{ object.title }}</div>
-        <hr>
+            <!-- Articles -->
+            <li >
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Articles</a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
 
-        {% for article in object.article_set.all %}
-            <a href="#">{{ article.title }}</a>
-            <hr>
-        {% endfor %}
+                    {% for article in object.article_set.all %}
+                        <li>
+                            <a href="#">{{ article.title }}</a>
+                        </li>
+                    {% endfor %}
 
-    </div>
+                </ul>
+            </li>
 
-    
-    <!-- Page content -->
-    <div class="main">
+            <!-- <li>
+                <a href="#">About</a>
+            </li> -->
 
+        </ul>
+
+        <!-- Add article button -->
+        <ul class="list-unstyled CTAs">
+            <li>
+                <a href="{% url 'app:article-create' object.id %}" class="btn btn-outline-primary">Add article</a>
+            </li>
+        </ul>
+
+    </nav>
+
+    <!-- Page Content -->
+    <div id="content">
+
+        <!-- Collapse button -->
+        <nav style="position: fixed;">
+            <button type="button" id="sidebarCollapse" class="collapseButton">
+                <i class="fas fa-align-left"></i>
+            </button>
+        </nav>
+
+        <!-- Page content -->
         <!-- Loading spinner while newspaper generation happens -->
         <div class="d-flex justify-content-center">
             <div id='loading' class="spinner-grow" role="status">
@@ -54,7 +87,7 @@
         </div>
 
         <!-- Editor div - where newspaper placed -->
-        <div id='editor' style="visibility: hidden; transform: scale(0.8);">
+        <div class="d-block justify-content-center" id='editor' style="visibility: hidden; transform: scale(0.8);">
 
             <!-- Page template. Probably should be in other file -->
             <page size="A5" id="page_template">
@@ -82,14 +115,14 @@
 
             </div>
         </div>
-    </div>
 
-
-    <!-- Page scale buttons -->
-    <div style ="position: fixed; bottom: 15px; right:15px;">
-        <a id="zoomOutButton" class="btn btn-secondary btn-circle""><i class="fa fa-minus" aria-hidden="true"></i></i></a>
-        <a id="zoomInButton" class="btn btn-secondary btn-circle"><i class="fa fa-plus" aria-hidden="true"></i></a>
+        <!-- Page scale buttons -->
+        <div style ="position: fixed; bottom: 15px; right:15px;">
+            <a id="zoomOutButton" class="btn btn-outline-secondary btn-circle""><i class="fa fa-minus" aria-hidden="true"></i></i></a>
+            <a id="zoomInButton" class="btn btn-outline-secondary btn-circle"><i class="fa fa-plus" aria-hidden="true"></i></a>
+        </div>
     </div>
+</div>
 
    
 {% endblock content %}
@@ -97,18 +130,33 @@
 {% block script %}
 
     <script>
-        var zoom = 1;
+        var zoom = 0.8;
         var zoomStep = 0.2;
 
         document.getElementById("zoomInButton").addEventListener("click", function() {
-          zoom += zoomStep;
-          document.getElementById("editor").style.transform = "scale(" + zoom + ")";
+            if (zoom < 1) {
+                zoom += zoomStep;
+
+                var editor = document.getElementById("editor");
+                var content = document.getElementById("content");
+
+                editor.style.transform = "scale(" + zoom + ")";
+                content.style.height = (editor.getBoundingClientRect().height + 100) + "px";
+            }
         });
+
         document.getElementById("zoomOutButton").addEventListener("click", function() {
-          if (zoom > zoomStep) {
-            zoom -= zoomStep;
-            document.getElementById("editor").style.transform = "scale(" + zoom + ")";
-          }
+            if (zoom > zoomStep + 0.01) {
+                zoom -= zoomStep;
+
+                var editor = document.getElementById("editor");
+                var content = document.getElementById("content");
+
+
+                editor.style.transform = "scale(" + zoom + ")";
+                content.style.height = (editor.getBoundingClientRect().height + 100) + "px";
+
+            }
         });
     </script>
 
@@ -149,4 +197,28 @@
             setTimeout(buildNewsletter, 1000);
         });
     </script>
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar, #content').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+
 {% endblock script %}
