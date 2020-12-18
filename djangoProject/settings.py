@@ -158,6 +158,7 @@ CKEDITOR_CONFIGS = {
             ['Link', 'Unlink'],
             ['Find', 'Replace'],
             ['RemoveFormat']
-        ]
+        ],
+        'width': '99.8%',
     },
 }

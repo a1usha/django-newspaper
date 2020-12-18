@@ -36,15 +36,19 @@ ul {
   display: none;
 }
 
+.django-ckeditor-widget{
+  width: 100%;
+}
+
 .content-section {
   width: 100%;
-  max-width: 837px;
+  max-width: 50%;
   height: 100%;
 }
 
 .form-group {
   width: 100%;
-  max-width: 837px;
+  max-width: 90%;
   padding: 0px;
   margin: 0 auto;
 }
@@ -55,7 +59,7 @@ ul {
 
 .form-group button, a {
   width: 100%;
-  max-width: 837px;
+  max-width: 50%;
 }
 
 .form-group .checkbox {
@@ -81,7 +85,7 @@ ul {
 }
 
 #id_title {
-  margin-bottom: -1px;
+  margin-bottom: 5px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }

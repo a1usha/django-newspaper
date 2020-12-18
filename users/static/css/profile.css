@@ -1,19 +1,17 @@
 .card {
-    width: 400px;
+    width: 115%;
     border: .05rem solid #e5e5e5;
     border-radius: 10px;
     background-color: #f3f3f3
+}
+
+img {
+    max-width: 100%;
+    height: auto;
 }
 
 .nsp-card {
-    width: 680px;
-    border: .05rem solid #e5e5e5;
-    border-radius: 10px;
-    background-color: #f3f3f3
-}
-
-.nsp-card-inner {
-    width: 645px;
+    width: 107%;
     border: .05rem solid #e5e5e5;
     border-radius: 10px;
     background-color: #f3f3f3
