@@ -12,6 +12,9 @@
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    
+    <!-- <script src="{% static 'bundles/jsToPdf/jspdf.umd.min.js' %}"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.2.0/jspdf.umd.min.js"></script> -->
 {% endblock extra_head %}
 
 {% block body_class %}
@@ -64,7 +67,7 @@
             </li>
 
             <!-- <li>
-                <a href="#">About</a>
+                <a href="#" onclick="savePdf();">Save PDF</a>
             </li> -->
 
         </ul>
