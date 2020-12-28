@@ -2,7 +2,9 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
+
 from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class Newspaper(models.Model):
@@ -24,7 +26,8 @@ class Newspaper(models.Model):
 class Article(models.Model):
     title = models.CharField(max_length=100)
     # content = models.TextField()
-    content = RichTextField(config_name='custom_ckeditor', blank=True, null=True)
+    # content = RichTextField(config_name='custom_ckeditor', blank=True, null=True)
+    content = RichTextUploadingField(config_name='custom_ckeditor', blank=True, null=True)
     author = models.CharField(max_length=50)
     date_created = models.DateField(default=timezone.now)
     newspaper = models.ForeignKey(Newspaper, on_delete=models.CASCADE)

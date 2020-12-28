@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "storages",
-    "ckeditor"
+    "ckeditor",
+    "ckeditor_uploader",
 ]
 
 MIDDLEWARE = [
@@ -144,6 +145,8 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 
+AWS_QUERYSTRING_AUTH = False
+
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
@@ -151,7 +154,7 @@ CKEDITOR_CONFIGS = {
     'custom_ckeditor': {
         'toolbar': 'Custom',
         'toolbar_Custom': [
-            ['Bold', 'Italic', 'Underline'],
+            ['Bold', 'Italic', 'Underline', 'Image'],
             ['Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ],
             ['NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['TextColor', 'BGColor'], 
@@ -162,3 +165,5 @@ CKEDITOR_CONFIGS = {
         'width': '99.8%',
     },
 }
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
