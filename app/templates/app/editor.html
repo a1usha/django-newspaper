@@ -13,8 +13,6 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
     
-    <!-- <script src="{% static 'bundles/jsToPdf/jspdf.umd.min.js' %}"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.2.0/jspdf.umd.min.js"></script> -->
 {% endblock extra_head %}
 
 {% block body_class %}
@@ -66,9 +64,9 @@
                 </ul>
             </li>
 
-            <!-- <li>
-                <a href="#" onclick="savePdf();">Save PDF</a>
-            </li> -->
+            <li>
+                <a href="{% url 'app:editor-update' object.id %}">Edit newspaper parameters</a>
+            </li>
 
         </ul>
 
@@ -85,7 +83,7 @@
     <div id="content">
 
         <!-- Collapse button -->
-        <nav style="position: fixed;">
+        <nav style="position: fixed; z-index: 700;">
             <button type="button" id="sidebarCollapse" class="collapseButton">
                 <i class="fas fa-align-left"></i>
             </button>
@@ -100,19 +98,19 @@
         </div>
 
         <!-- Editor div - where newspaper placed -->
-        <div class="d-block justify-content-center" id='editor' style="visibility: hidden; transform: scale(0.8);">
+        <div class="" id='editor' style="visibility: hidden; transform: scale(0.8);">
 
             <!-- Page template. Probably should be in other file -->
-            <page size="A5" id="page_template">
+            <page size="{{ object.page_size }}" id="page_template">
                 <div class='header'>
                     {{ object.title }}
-                    <hr>
+                    <hr size="{{ object.page_size }}">
                 </div>
                 <div class='content'></div>
                 <div class='footer'>
-                    <hr>
+                    <hr size="{{ object.page_size }}">
                     <span>Page: </span>
-                    {{ object.date_posted }}
+                    <!-- {{ object.date_posted }} -->
                 </div>
             </page>
 
@@ -124,7 +122,6 @@
                     <p><i>By {{ article.author }} at {{ article.date_created }}</i></p>
                     <p>{{ article.content|safe }}</p>
                 {% endfor %}
-
 
             </div>
         </div>
@@ -142,6 +139,13 @@
 
 {% block script %}
 
+    <!-- <script>
+        $(document).ready(function() {
+            var width = document.getElementById('page_template').offsetWidth;
+            document.getElementById('content').style.width = width + 'px';
+        });
+    </script> -->
+
     <script>
         var zoom = 0.8;
         var zoomStep = 0.2;
@@ -154,7 +158,7 @@
                 var content = document.getElementById("content");
 
                 editor.style.transform = "scale(" + zoom + ")";
-                content.style.height = (editor.getBoundingClientRect().height + 100) + "px";
+                // content.style.height = (editor.getBoundingClientRect().height + 100) + "px";
             }
         });
 
@@ -167,7 +171,7 @@
 
 
                 editor.style.transform = "scale(" + zoom + ")";
-                content.style.height = (editor.getBoundingClientRect().height + 100) + "px";
+                // content.style.height = (editor.getBoundingClientRect().height + 100) + "px";
 
             }
         });
@@ -175,7 +179,29 @@
 
     <script>
         $(function() {
-            var content_height = 2070; // the height of the content, discluding the header/footer
+
+            var size = document.getElementById("page_template").getAttribute("size");
+            var content_height = 0; // the height of the content, discluding the header/footer
+
+            switch(size) {
+                case "broadsheet":
+                    content_height = 2680;
+                    break;
+                case "berliner":
+                    content_height = 1620;
+                    break;
+                case "tabloid":
+                    content_height = 1490;
+                    break;
+                default:
+                    content_height = 0;
+                    break;
+            }
+
+            // 1620 - berliner
+            // 2680 - broadsheet
+            // 1490 - tabloid
+
             var page = 1; // the beginning page number to show in the footer
             function buildNewsletter() {
 
@@ -191,7 +217,7 @@
 
                     // here is the columnizer magic
                     $('#newsletterContent').columnize({
-                        columns: 4,
+                        columns: '{{ object.columns }}',
                         target: ".page:last .content",
                         overflow: {
                             height: content_height,

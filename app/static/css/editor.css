@@ -60,6 +60,8 @@ a:focus {
     background: #e5e8eb;
     color: #212529;
     border: none;
+    z-index: -1;
+    box-shadow: 0 0 0.1cm rgba(0, 0, 0, 0.5);
 }
 
 #sidebar {
@@ -68,11 +70,12 @@ a:focus {
     top: 0;
     left: 0;
     height: 100vh;
-    z-index: 999;
+    z-index: 800;
     background: #f3f3f3;
     border: .05rem solid #e5e5e5;
     color: #212529;
     transition: all 0.3s;
+    box-shadow: 0 0 0.1cm rgba(0, 0, 0, 0.5);
 }
 
 #sidebar.active {
@@ -172,7 +175,10 @@ a.article:hover {
     position: absolute;
     top: 0;
     right: 0;
-    background: #ffffff !important;
+    /* background: #ffffff !important; */
+    text-align:center;
+    /* display: flex; */
+    /* overflow-x: auto; */
 }
 
 #content.active {
@@ -180,12 +186,14 @@ a.article:hover {
 }
 
 #editor {
+    /* justify-content: center; */
+    display: inline-block;
     transform-origin: top center;
 }
 
 .page {
-    width: 42cm;
-    height: 59.4cm;
+    /* width: 42cm;
+    height: 59.4cm; */
   /* margin: 20px; */
   margin-bottom: 0.5cm;
   margin-top: 0.5cm;
@@ -208,7 +216,10 @@ a.article:hover {
 
 .page .content .column img {
   float: left;
-  margin: 10px;
+  width: 100% !important;
+  height: auto !important;
+  display:block;
+  margin:auto;
 }
 
 .page .content .column p {
@@ -229,7 +240,7 @@ a.article:hover {
 
 .page .header hr,
 .page .footer hr {
-  width: 1500px;
+  width: 1000px;
 }
 
 .page .footer {
@@ -253,10 +264,67 @@ a.article:hover {
 
 page {
     background: #fbfbf8;
-    display: inline-block;
+    display: block;
     margin: 0 auto;
     margin-bottom: 0.5cm;
     box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+  }
+
+  page[size="broadsheet"] {
+    width: 600mm;
+    height: 750mm;
+  }
+
+  .page .header hr[size="broadsheet"] {
+    width: 580mm;
+  }
+
+  .page .footer hr[size="broadsheet"] {
+    width: 580mm;
+    margin-bottom: 13mm;
+    margin-left: 7mm;
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
+  page[size="berliner"] {
+    width: 315mm;
+    height: 470mm;
+  }
+
+  .page .header hr[size="berliner"] {
+    width: 300mm;
+  }
+
+  .page .footer hr[size="berliner"] {
+    width: 300mm;
+    margin-bottom: 13mm;
+    margin-left: 7mm;
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
+  page[size="tabloid"] {
+    width: 280mm;
+    height: 430mm;
+  }
+
+  .page .header hr[size="tabloid"] {
+    width: 265mm;
+  }
+
+  .page .footer hr[size="tabloid"] {
+    width: 265mm;
+    margin-bottom: 13mm;
+    margin-left: 7mm;
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
   }
   
   page[size="A4"] {

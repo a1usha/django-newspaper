@@ -29,7 +29,7 @@ class EditorDetailView(PermissionRequiredMixin, DetailView):
 # Create newspaper
 class EditorCreateView(LoginRequiredMixin, CreateView):
     model = Newspaper
-    fields = ['title']
+    fields = ['title', 'page_size', 'columns']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -39,11 +39,14 @@ class EditorCreateView(LoginRequiredMixin, CreateView):
 # Edit newspaper parameters
 class EditorUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Newspaper
-    fields = ['title']
+    fields = ['title', 'page_size', 'columns']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('app:editor', kwargs={'pk': self.get_object().id})
 
     # Check if it is a user's newspaper
     def has_permission(self):

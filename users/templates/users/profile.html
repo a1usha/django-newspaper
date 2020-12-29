@@ -14,7 +14,7 @@
         <!-- Header - where newspaper editor placed -->
         <header class="blog-header py-3">
             <div class="row flex-nowrap justify-content-center align-items-center">
-                <a class="blog-header-logo text-dark" href="https://getbootstrap.com/docs/4.0/examples/blog/#">Newspaper Editor</a>
+                <a class="blog-header-logo text-dark" href="{% url 'app:index' %}">Newspaper Editor</a>
             </div>
         </header>
 
@@ -109,7 +109,7 @@
                                         <div class="button mt-2 d-flex flex-row align-items-center"> 
                                             <a class="btn btn-sm btn-outline-primary w-100 mr-1" href="{% url 'app:editor' newspaper.id %}">Open newspaper</a>
                                             <a class="btn btn-sm btn-outline-primary w-100 mr-1" href="{% url 'app:article-create' newspaper.id %}">Add article</a>
-                                            <a class="btn btn-sm btn-outline-primary w-100 mr-1" href="{% url 'app:editor-update' newspaper.id %}">Rename newspaper</a>
+                                            <a class="btn btn-sm btn-outline-primary w-100 mr-1" href="{% url 'app:editor-update' newspaper.id %}">Edit parameters</a>
                                             <a class="btn btn-sm btn-outline-primary w-100" href="{% url 'app:editor-delete' newspaper.id %}">Delete newspaper</a>
                                         </div>
                                     </div>
