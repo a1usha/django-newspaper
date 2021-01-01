@@ -33,6 +33,10 @@ a:focus {
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.draggable {
+    cursor: move;
+}
+
 .navbar-btn {
     box-shadow: none;
     outline: none !important;

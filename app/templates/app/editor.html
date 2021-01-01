@@ -41,18 +41,16 @@
             </li>
 
             <!-- Articles -->
-            <li >
+            <li>
                 <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Articles</a>
-                <ul class="collapse list-unstyled" id="homeSubmenu">
+                <ul class="collapse list-unstyled articles" id="homeSubmenu">
 
                     {% for article in object.article_set.all %}
-                        <!-- <li>
-                            <a href="{% url 'app:article-update' object.id article.id %}">{{ article.title }}</a>
-                        </li> -->
 
-                        <ul class="navbar-nav">
+                        <ul class="navbar-nav draggable article-item" draggable="true" id='{{ article.id }}'>
                             <li class="nav-item dropdown">
                                 <a class="nav-link" href="#" data-toggle="dropdown">{{ article.title }}</a>
+                                <p id="article-id" style="display: none;">{{ article.id }}</p>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="{% url 'app:article-update' object.id article.id %}">Edit article</a></li>
                                     <li><a class="dropdown-item" href="{% url 'app:article-delete' object.id article.id %}">Delete article</a></li>
@@ -73,7 +71,10 @@
         <!-- Add article button -->
         <ul class="list-unstyled CTAs">
             <li>
-                <a href="{% url 'app:article-create' object.id %}" class="btn btn-outline-secondary">Add article</a>
+                <a href="{% url 'app:article-create' object.id %}" class="btn btn-outline-secondary mb-2">Add article</a>
+            </li>
+            <li>
+                <a class="btn btn-outline-secondary" id="reload-btn" onClick="window.location.href=window.location.href">Reload newspaper</a>
             </li>
         </ul>
 
@@ -258,6 +259,100 @@
                 $('a[aria-expanded=true]').attr('aria-expanded', 'false');
             });
         });
+    </script>
+
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', (event) => {
+
+            var dragSrcEl = null;
+
+            function handleDragStart(e) {
+                // this.style.opacity = '0.4';
+                
+                dragSrcEl = this;
+
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/html', this.innerHTML);
+            }
+
+            function handleDragOver(e) {
+                if (e.preventDefault) {
+                    e.preventDefault();
+                }
+
+                e.dataTransfer.dropEffect = 'move';
+                
+                return false;
+            }
+
+            function handleDragEnter(e) {
+                this.classList.add('over');
+            }
+
+            function handleDragLeave(e) {
+                this.classList.remove('over');
+            }
+
+            function handleDrop(e) {
+                if (e.stopPropagation) {
+                    e.stopPropagation(); // stops the browser from redirecting.
+                }
+                
+                if (dragSrcEl != this) {
+                    dragSrcEl.innerHTML = this.innerHTML;
+                    this.innerHTML = e.dataTransfer.getData('text/html');
+                }
+
+                var items = Array.prototype.slice.call(document.getElementById('homeSubmenu').children);
+                var orders = {};
+                    
+                for (var i = 0; i < items.length; i++) {
+                    orders[items[i].querySelector('#article-id').innerHTML] = items.indexOf(items[i]);
+                }
+
+                console.log(orders);
+
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'app:article-order-update' %}",
+                    data: {
+                        'orders': JSON.stringify(orders),
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    },
+                    success: function () {
+                        console.log($(document.getElementById(e.target.parentElement.querySelector('#article-id').innerHTML)).index())
+                    }
+                });
+                
+                orders = {};
+
+                $('#reload-btn').removeClass('btn-outline-secondary').addClass('btn-info ');
+
+
+                return false;
+            }
+
+            function handleDragEnd(e) {
+                // this.style.opacity = '1';  
+            
+                items.forEach(function (item) {
+                    item.classList.remove('over');
+                });
+            }
+
+
+                let items = document.querySelectorAll('.articles .article-item');
+                items.forEach(function(item) {
+                    item.addEventListener('dragstart', handleDragStart, false);
+                    item.addEventListener('dragenter', handleDragEnter, false);
+                    item.addEventListener('dragover', handleDragOver, false);
+                    item.addEventListener('dragleave', handleDragLeave, false);
+                    item.addEventListener('drop', handleDrop, false);
+                    item.addEventListener('dragend', handleDragEnd, false);
+                });
+            });
+
     </script>
 
 {% endblock script %}

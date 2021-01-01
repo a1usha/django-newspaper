@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth import authenticate, login
+from django.http import JsonResponse
+import json
 
 from django.views.generic import (
     DetailView,
@@ -153,3 +155,19 @@ class ArticleDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView)
 
 def index(request):
     return render(request, 'app/index.html')
+
+
+# Update order of articles using ajax
+def updateArticleOrder(request):
+    # request should be ajax and method should be POST.
+    if request.is_ajax and request.method == "POST":
+        
+        orders = json.loads(request.POST.get('orders'))
+
+        for article_id in orders:
+            article = Article.objects.filter(pk=article_id).update(order=orders[article_id])
+            
+        return JsonResponse({"ok": ""}, status=200)
+
+    # some error occured
+    return JsonResponse({"error": ""}, status=400)

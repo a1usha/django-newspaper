@@ -8,6 +8,7 @@ from .views import (
     ArticleCreateView,
     ArticleUpdateView,
     ArticleDeleteView,
+    updateArticleOrder,
 )
 
 app_name = "app"
@@ -20,4 +21,5 @@ urlpatterns = [
     path("newspaper/<int:newspaper_id>/newarticle/", ArticleCreateView.as_view(), name='article-create'),
     path("newspaper/<int:newspaper_id>/article/<int:pk>/update", ArticleUpdateView.as_view(), name='article-update'),
     path("newspaper/<int:newspaper_id>/article/<int:pk>/delete", ArticleDeleteView.as_view(), name='article-delete'),
+    path("newspaper/ajax/article_order", updateArticleOrder, name='article-order-update')
 ]

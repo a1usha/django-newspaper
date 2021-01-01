@@ -43,12 +43,15 @@ class Newspaper(models.Model):
 
 class Article(models.Model):
     title = models.CharField(max_length=100)
-    # content = models.TextField()
     # content = RichTextField(config_name='custom_ckeditor', blank=True, null=True)
     content = RichTextUploadingField(config_name='custom_ckeditor', blank=True, null=True)
     author = models.CharField(max_length=50)
     date_created = models.DateField(default=timezone.now)
     newspaper = models.ForeignKey(Newspaper, on_delete=models.CASCADE)
+    order = models.IntegerField(default=1000, null=True)
+
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
         return "'{}' written by {}".format(self.title, self.author)
