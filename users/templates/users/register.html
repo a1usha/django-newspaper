@@ -33,6 +33,28 @@
         document.forms["main-form"].getElementsByTagName("input")[1].placeholder="Username";
         document.forms["main-form"].getElementsByTagName("input")[2].placeholder="Password";
         document.forms["main-form"].getElementsByTagName("input")[3].placeholder="Repeat password";
+        document.forms["main-form"].getElementsByTagName("option")[0].textContent="Select role";
+
+        if (window.location.href.indexOf("register") > -1) {
+            Array.prototype.forEach.call(document.forms["main-form"].getElementsByTagName("option"), function(item) {
+                if (item.textContent != 'Copy editor' && item.textContent != 'Default user') {
+                    item.style.display = "none"
+                }
+            });
+        } else if (window.location.href.indexOf("add_user") > -1) {
+            Array.prototype.forEach.call(document.forms["main-form"].getElementsByTagName("option"), function(item) {
+                if (item.textContent == 'Copy editor' || item.textContent == 'Default user' || item.textContent == 'Select role') {
+                    item.style.display = "none"
+                }
+            });
+        }
     })();
+
+    $(function(){
+        $(".dropdown-menu a").click(function(){
+            $(".dropdown-toggle:first-child").text($(this).text());
+            $(".dropdown-toggle:first-child").val($(this).text());
+        });
+    });
 </script>
 {% endblock script %}

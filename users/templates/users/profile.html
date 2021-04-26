@@ -34,14 +34,22 @@
             <div class="col-md-4 mr-5">
                 <div class="card p-3">
                     <div class="d-flex align-items-center">
-                        <div class="image"> <img src="{{ user.profile.image.url }}" class="rounded" width="250" height="250"> </div>
+                        <div class="image"> 
+                            <img src="{{ user.profile.image.url }}" class="rounded" width="250" height="250"> 
+                            <div class="button mt-2 d-flex flex-row align-items-center"> 
+                                <button class="btn btn-sm btn-outline-primary w-100" onclick="showEdit()">Edit profile</button>
+                            </div>
+                        </div>
+
                         <div class="ml-3 w-100">
 
                             {% if user.get_full_name != '' %}
-                                <h5 class="mb-3 mt-0">{{ user.get_full_name }}</h5> 
+                                <h5 class="mt-0">{{ user.get_full_name }}</h5> 
                             {% else %}
-                                <h5 class="mb-3 mt-0">{{ user.username }}</h5> 
+                                <h5 class="mt-0">{{ user.username }}</h5> 
                             {% endif %}
+
+                            <h6 class="mb-3 mt-0">{{ user.groups.all.0 }}</h6> 
 
                             <div class="p-2 mt-2 bg-primary d-flex justify-content-center rounded text-white stats">
                                 <div class="d-flex flex-column"> <span class="articles">Newspapers</span> <span class="number1">{{ user.newspaper_set.count }}</span></div>
@@ -52,7 +60,7 @@
                             </div>
 
                             <div class="button mt-2 d-flex flex-row align-items-center"> 
-                                <button class="btn btn-sm btn-outline-primary w-100" onclick="showEdit()">Edit profile</button>
+                                <a class="btn btn-sm btn-outline-primary w-100" href="{% url 'add-user' %}">Add user</a>
                             </div>
                         </div>
                     </div>
@@ -62,6 +70,9 @@
                         {% for message in messages %}
                             <div class="mt-4 alert alert-{{ message.tags }}">
                                 {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
                         {% endfor %}
                     {% endif %}
@@ -110,7 +121,7 @@
                                             <a class="btn btn-sm btn-outline-primary w-100 mr-1" href="{% url 'app:editor' newspaper.id %}">Open newspaper</a>
                                             <a class="btn btn-sm btn-outline-primary w-100 mr-1" href="{% url 'app:article-create' newspaper.id %}">Add article</a>
                                             <a class="btn btn-sm btn-outline-primary w-100 mr-1" href="{% url 'app:editor-update' newspaper.id %}">Edit parameters</a>
-                                            <a class="btn btn-sm btn-outline-primary w-100" href="{% url 'app:editor-delete' newspaper.id %}">Delete newspaper</a>
+                                            <a class="btn btn-sm btn-outline-danger w-100" href="{% url 'app:editor-delete' newspaper.id %}">Delete newspaper</a>
                                         </div>
                                     </div>
                                 </div>
