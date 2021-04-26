@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,28 +21,37 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "qy6$8#**#h6+wgvhw)*e0(ok6i%17d1=u9fwa0((9zo*8)5$5p"
+# SECRET_KEY = "qy6$8#**#h6+wgvhw)*e0(ok6i%17d1=u9fwa0((9zo*8)5$5p"
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = (os.environ.get('DEBUG') == "True")
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['newspaper-editor.herokuapp.com']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "users.apps.UsersConfig",
     "app.apps.AuthorizationConfig",
+    "crispy_forms",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "storages",
+    "ckeditor",
+    "ckeditor_uploader",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -118,4 +128,50 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOGIN_REDIRECT_URL = 'profile'
+LOGIN_URL = 'login'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+
+# AWS_QUERYSTRING_AUTH = False
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_QUERYSTRING_EXPIRE = '157784630'
+
+
+CKEDITOR_CONFIGS = {
+    'custom_ckeditor': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline', 'Image'],
+            ['Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ],
+            ['NumberedList', 'BulletedList', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['TextColor', 'BGColor'], 
+            ['Link', 'Unlink'],
+            ['Find', 'Replace'],
+            ['RemoveFormat']
+        ],
+        'width': '99.8%',
+    },
+}
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+GRAPH_MODELS = {
+    'all_applications': True,
+    'group_models': True,
+}

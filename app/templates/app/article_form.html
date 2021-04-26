@@ -1,0 +1,77 @@
+{% extends "app/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block extra_head %}
+    <link href="{% static 'css/article.css' %}" rel="stylesheet">
+    <script src="{% static 'bundles/pdf/build/pdf.js' %}"></script>
+    <!-- <script src="https://cdn.ckeditor.com/ckeditor5/24.0.0/classic/ckeditor.js"></script> -->
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+{% endblock extra_head %}
+
+{% block content %}
+    <div class="content-section wide mt-5">
+        <form id="main-form" method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group wide">
+                <img class="mb-4" src="{% static 'images/newspaper_logo.png' %}" alt="" width="100" height="100" id="image_logo">
+                <h1 class="h3 mb-3 font-weight-normal">Edit Article</h1>
+                {{ form.media  }}
+                {{ form|crispy  }}
+            </fieldset>
+            <div class="mt-3 form-group">
+                <input type="file" class="btn btn-outline-secondary w-50 form-control-file" id="file-selector">
+                <div>
+                    <p id="status"></p>
+                </div>
+                <input class="btn btn-outline-primary w-50 mb-2" type="submit" name="to_profile" value='Create and go to Profile'>
+                <input class="btn btn-outline-primary w-50 mb-2" type="submit" name="to_editor" value='Create and go to Editor'>
+                <a class="btn btn-outline-secondary w-50 mb-3" href="{% url 'profile' %}">Cancel</a>
+            </div>
+        </form> 
+    </div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    (function () {
+        document.forms["main-form"].getElementsByTagName("input")[1].placeholder="Title";
+        document.forms["main-form"].getElementsByTagName("input")[2].placeholder="Author name";
+        document.forms["main-form"].getElementsByTagName("input")[3].placeholder="Date created";
+        $('#id_content').attr("placeholder", "Content");
+    })();
+</script>
+
+<script>
+    // Path to PDF file
+    var PDF_URL = '/path/to/example.pdf';
+    // Specify the path to the worker
+    PDFJS.workerSrc = '/path/to/pdf.worker.js';
+
+</script>
+
+<script>
+    const status = document.getElementById('status');
+    if (window.FileList && window.File && window.FileReader) {
+      document.getElementById('file-selector').addEventListener('change', event => {
+        status.textContent = '';
+        const file = event.target.files[0];
+        console.log(file);
+        if (!file.type) {
+          status.textContent = 'Error: The File.type property does not appear to be supported on this browser.';
+          return;
+        }
+        if (!file.type.match('text.*')) {
+          status.textContent = 'Error: The selected file does not appear to be an .txt file.'
+          return;
+        }
+        const reader = new FileReader();
+        reader.addEventListener('load', event => {
+            console.log(CKEDITOR.instances.id_content.insertText(event.target.result));
+        });
+        reader.readAsText(file);
+      }); 
+    }
+  </script>
+{% endblock script %}

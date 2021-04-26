@@ -4,36 +4,93 @@
 {% block extra_head %}
     <script src="{% static 'bundles/columnizer/src/jquery.js' %}"></script>
     <script src="{% static 'bundles/columnizer/src/jquery.columnizer.min.js' %}" type="text/javascript" charset="utf-8"></script>
-    <link href="{% static 'css/style.css' %}" rel="stylesheet" >
+    <link href="{% static 'css/editor.css' %}" rel="stylesheet" >
+
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">  
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    
 {% endblock extra_head %}
 
-<!-- {% block body_class %}body{% endblock body_class %} -->
+{% block body_class %}
+{% endblock %}
 
 {% block content %}
 
-    <!-- Toolbar - top navbar -->
-    <div class="topnav">
-        <div class="d-flex justify-content-center" style="margin-left: 200px;">
-            <a class="active" href="#home">Save</a>
-            <a href="#">Export to</a>
-            <a href="#">Layout</a>
-            <a href="#">Profile</a>
+<div class="wrapper">
+
+    <!-- Sidebar -->
+    <nav id="sidebar">
+
+        <!-- Newspaper name -->
+        <div class="sidebar-header">
+            <h3>{{ object.title }}</h3>
         </div>
-    </div>
 
+        <ul class="list-unstyled components">
+            <!-- User profile -->
+            <li >
+                {% if user.get_full_name != '' %}
+                    <a href="{% url 'profile' %}">{{ user.get_full_name }}</a>
+                {% else %}
+                    <a href="{% url 'profile' %}">{{ user.username }}</a> 
+                {% endif %}
+            </li>
 
-    <!-- Table of contents - left navbar -->
-    <div class="sidenav">
-        <div class="sidebar-heading">Newspaper name</div>
-        <a href="#">Article 1</a>
-        <a href="#">Article 2</a>
-        <a href="#">Article 3</a>
-        <a href="#">Article 4</a>
-    </div>
-    
-    <!-- Page content -->
-    <div class="main">
+            <!-- Articles -->
+            <li>
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Articles</a>
+                <ul class="collapse list-unstyled articles" id="homeSubmenu">
 
+                    {% for article in object.article_set.all %}
+
+                        <ul class="navbar-nav draggable article-item" draggable="true" id='{{ article.id }}'>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" href="#" data-toggle="dropdown">{{ article.title }}</a>
+                                <p id="article-id" style="display: none;">{{ article.id }}</p>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{% url 'app:article-update' object.id article.id %}">Edit article</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'app:article-delete' object.id article.id %}">Delete article</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    {% endfor %}
+
+                </ul>
+            </li>
+
+            <li>
+                <a href="{% url 'app:editor-update' object.id %}">Edit newspaper parameters</a>
+            </li>
+
+        </ul>
+
+        <!-- Add article button -->
+        <ul class="list-unstyled CTAs">
+            <li>
+                <a href="{% url 'app:article-create' object.id %}" class="btn btn-outline-secondary mb-2">Add article</a>
+            </li>
+            <li>
+                <a class="btn btn-outline-secondary" id="reload-btn" onClick="window.location.href=window.location.href">Reload newspaper</a>
+            </li>
+        </ul>
+
+    </nav>
+
+    <!-- Page Content -->
+    <div id="content">
+
+        <!-- Collapse button -->
+        <nav style="position: fixed; z-index: 700;">
+            <button type="button" id="sidebarCollapse" class="collapseButton">
+                <i class="fas fa-align-left"></i>
+            </button>
+        </nav>
+
+        <!-- Page content -->
         <!-- Loading spinner while newspaper generation happens -->
         <div class="d-flex justify-content-center">
             <div id='loading' class="spinner-grow" role="status">
@@ -42,159 +99,110 @@
         </div>
 
         <!-- Editor div - where newspaper placed -->
-        <div id='editor' style="visibility: hidden; transform: scale(0.8);">
+        <div class="" id='editor' style="visibility: hidden; transform: scale(0.8);">
 
             <!-- Page template. Probably should be in other file -->
-            <page size="A5" id="page_template">
+            <page size="{{ object.page_size }}" id="page_template">
                 <div class='header'>
-                    This is a header
-                    <hr>
+                    {{ object.title }}
+                    <hr size="{{ object.page_size }}">
                 </div>
                 <div class='content'></div>
                 <div class='footer'>
-                    <hr>
+                    <hr size="{{ object.page_size }}">
                     <span>Page: </span>
-                    This is the footer.
+                    <!-- {{ object.date_posted }} -->
                 </div>
             </page>
 
             <!-- Info which columnizer use to generate newspaper pages -->
             <div id="newsletterContent">
-                <h1>Lorem ipsum ne justo</h1>
-                <p>Bonorum has. His ut cibo quas tantas, vis ut probo adhuc definiebas, has at meis debet vulputate. No sed velit essent suavitate, in pro decore ceteros temporibus, usu in odio offendit theophrastus. Mel labore indoctum cu, ad soleat admodum
-                    delicatissimi sed, mei viris tritani ullamcorper eu. Ut vim simul aperiam.
-                </p>
-                <p>Blandit insolens constituto vix an. Has diam wisi in, <a href='javascript:;'>eum unum</a> repudiare no. Sit at virtute rationibus, qui vitae explicari cu. Vim ne singulis voluptatum, sed puto accusata salutandi ei. Ad mel civibus adversarium.</p>
-                <blockquote>
-                    <p>Ius mutat commune expetendis in. Nam et quas sensibus reprimique, vix no erat soluta suavitate. At mel eius dictas latine. Corrumpit inciderint reformidans sed no, no usu omnis utinam noluisse.</p>
-                </blockquote>
-                <p>Probo debet quaestio an eos, no mel assum iracundia delicatissimi, rebum facete utroque sed ex. Eu melius invidunt <img src="{% static 'images/painting3.jpg' %}"> repudiandae vix, eu paulo reformidans deterruisset duo, solum voluptaria
-                    efficiantur ea mel. Qui summo zzril alienum et. Eu est ferri iuvaret, mazim epicurei sententiae ut cum, modo reque intellegat ex vix. Vim eu tibique accusamus, quot electram at qui.</p>
-                <p>Eu eleifend repudiandae has. Mea eu ridens aliquam. Nisl <a href='javascript:;'>aeque sit ut</a>, posse dolor utinam cum in. Ad timeam sapientem eos, et eripuit inermis nam. Eos integre voluptaria ne, iriure concludaturque ut eum.</p>
-                <p>Sit et, an ius nihil apeirian. Eu posse tempor iuvaret cum. No diam dolor sea, postea mnesarchum ne ius, vel no utinam ignota dolores. Malis suscipit accusamus his ne, utinam <a href='javascript:;'>assentior
-                        prodesset</a> ea eam, facer partem antiopam et cum.</p>
-                <p>Vis erant intellegat in. Soleat legere no ius, usu ex laoreet molestie. Sit eu sint inermis. Ea zzril scribentur pro.</p>
-                <h1>Tempor essent appetere</h1>
-                <p>Ius mutat commune expetendis in. Nam et quas sensibus reprimique, vix no erat soluta suavitate. At mel eius dictas latine. Corrumpit inciderint reformidans sed no, no usu omnis utinam noluisse.</p>
-                <p>Sit et, an ius nihil apeirian. Eu posse tempor iuvaret cum. No diam dolor sea, postea mnesarchum ne ius, vel no utinam <a href='javascript:;'>ignota dolores</a>. Malis suscipit accusamus his ne, utinam assentior prodesset ea eam, facer
-                    partem antiopam et cum.</p>
-                <p class='dontsplit'>Blandit insolens constituto vix an. Has diam wisi in, eum unum repudiare no. Sit at virtute rationibus, qui vitae explicari cu. Vim ne singulis voluptatum, sed puto accusata salutandi ei. Ad mel civibus adversarium.</p>
-                <p>Per ne solum vivendo, fabulas dolorem vivendo in pro. Nec duis ignota cotidieque no, an per possit nostrum. Pro detraxit definitionem eu. Vivendo officiis no nam, eu has reque maiestatis percipitur, dolore reprimique accommodare cum ad.
-                    No utinam voluptua oportere pri, augue sonet dicant ei sea.</p>
-                <p>Probo debet quaestio an eos, no mel assum iracundia delicatissimi, rebum facete utroque sed ex. Eu melius invidunt repudiandae vix, eu paulo <a href='javascript:;'>reformidans</a> deterruisset duo, solum voluptaria efficiantur ea mel.
-                    Qui summo zzril alienum et. Eu est ferri iuvaret, mazim epicurei sententiae ut cum, modo reque intellegat ex vix. Vim eu tibique accusamus, quot electram at qui.</p>
-                <p>Ex iisque eleifend periculis has. Sit aeterno virtute partiendo ei, eam nonumy bonorum adolescens ad. Ut nec suas vocent ornatus, cetero legendos constituam mea ea, pri cu delenit iracundia. Mundi decore nec te.
-                </p>
-                <h1>Lorem ipsum ne justo</h1>
-                <p>Bonorum has. His ut cibo quas tantas, vis ut probo adhuc definiebas, has at meis debet vulputate. No sed velit essent suavitate, in pro decore ceteros temporibus, usu in odio offendit theophrastus. Mel labore indoctum cu, ad soleat admodum
-                    delicatissimi sed, mei viris tritani ullamcorper eu. Ut vim simul aperiam.
-                </p>
-                <p>Blandit insolens constituto vix an. Has diam wisi in, <a href='javascript:;'>eum unum</a> repudiare no. Sit at virtute rationibus, qui vitae explicari cu. Vim ne singulis voluptatum, sed puto accusata salutandi ei. Ad mel civibus adversarium.</p>
-                <blockquote>
-                    <p>Ius mutat commune expetendis in. Nam et quas sensibus reprimique, vix no erat soluta suavitate. At mel eius dictas latine. Corrumpit inciderint reformidans sed no, no usu omnis utinam noluisse.</p>
-                </blockquote>
-                <p>Probo debet quaestio an eos, no mel assum iracundia delicatissimi, rebum facete utroque sed ex. Eu melius invidunt <img src="{% static 'images/painting3.jpg' %}"> repudiandae vix, eu paulo reformidans deterruisset duo, solum voluptaria
-                    efficiantur ea mel. Qui summo zzril alienum et. Eu est ferri iuvaret, mazim epicurei sententiae ut cum, modo reque intellegat ex vix. Vim eu tibique accusamus, quot electram at qui.</p>
-                <p>Eu eleifend repudiandae has. Mea eu ridens aliquam. Nisl <a href='javascript:;'>aeque sit ut</a>, posse dolor utinam cum in. Ad timeam sapientem eos, et eripuit inermis nam. Eos integre voluptaria ne, iriure concludaturque ut eum.</p>
-                <p>Sit et, an ius nihil apeirian. Eu posse tempor iuvaret cum. No diam dolor sea, postea mnesarchum ne ius, vel no utinam ignota dolores. Malis suscipit accusamus his ne, utinam <a href='javascript:;'>assentior
-                        prodesset</a> ea eam, facer partem antiopam et cum.</p>
-                <p>Vis erant intellegat in. Soleat legere no ius, usu ex laoreet molestie. Sit eu sint inermis. Ea zzril scribentur pro.</p>
-                <h1>Tempor essent appetere</h1>
-                <p>Ius mutat commune expetendis in. Nam et quas sensibus reprimique, vix no erat soluta suavitate. At mel eius dictas latine. Corrumpit inciderint reformidans sed no, no usu omnis utinam noluisse.</p>
-                <p>Sit et, an ius nihil apeirian. Eu posse tempor iuvaret cum. No diam dolor sea, postea mnesarchum ne ius, vel no utinam <a href='javascript:;'>ignota dolores</a>. Malis suscipit accusamus his ne, utinam assentior prodesset ea eam, facer
-                    partem antiopam et cum.</p>
-                <p class='dontsplit'>Blandit insolens constituto vix an. Has diam wisi in, eum unum repudiare no. Sit at virtute rationibus, qui vitae explicari cu. Vim ne singulis voluptatum, sed puto accusata salutandi ei. Ad mel civibus adversarium.</p>
-                <p>Per ne solum vivendo, fabulas dolorem vivendo in pro. Nec duis ignota cotidieque no, an per possit nostrum. Pro detraxit definitionem eu. Vivendo officiis no nam, eu has reque maiestatis percipitur, dolore reprimique accommodare cum ad.
-                    No utinam voluptua oportere pri, augue sonet dicant ei sea.</p>
-                <p>Probo debet quaestio an eos, no mel assum iracundia delicatissimi, rebum facete utroque sed ex. Eu melius invidunt repudiandae vix, eu paulo <a href='javascript:;'>reformidans</a> deterruisset duo, solum voluptaria efficiantur ea mel.
-                    Qui summo zzril alienum et. Eu est ferri iuvaret, mazim epicurei sententiae ut cum, modo reque intellegat ex vix. Vim eu tibique accusamus, quot electram at qui.</p>
-                <p>Ex iisque eleifend periculis has. Sit aeterno virtute partiendo ei, eam nonumy bonorum adolescens ad. Ut nec suas vocent ornatus, cetero legendos constituam mea ea, pri cu delenit iracundia. Mundi decore nec te.
-                </p>
-                <h1>Lorem ipsum ne justo</h1>
-                <p>Bonorum has. His ut cibo quas tantas, vis ut probo adhuc definiebas, has at meis debet vulputate. No sed velit essent suavitate, in pro decore ceteros temporibus, usu in odio offendit theophrastus. Mel labore indoctum cu, ad soleat admodum
-                    delicatissimi sed, mei viris tritani ullamcorper eu. Ut vim simul aperiam.
-                </p>
-                <p>Blandit insolens constituto vix an. Has diam wisi in, <a href='javascript:;'>eum unum</a> repudiare no. Sit at virtute rationibus, qui vitae explicari cu. Vim ne singulis voluptatum, sed puto accusata salutandi ei. Ad mel civibus adversarium.</p>
-                <blockquote>
-                    <p>Ius mutat commune expetendis in. Nam et quas sensibus reprimique, vix no erat soluta suavitate. At mel eius dictas latine. Corrumpit inciderint reformidans sed no, no usu omnis utinam noluisse.</p>
-                </blockquote>
-                <p>Probo debet quaestio an eos, no mel assum iracundia delicatissimi, rebum facete utroque sed ex. Eu melius invidunt <img src="{% static 'images/painting3.jpg' %}"> repudiandae vix, eu paulo reformidans deterruisset duo, solum voluptaria
-                    efficiantur ea mel. Qui summo zzril alienum et. Eu est ferri iuvaret, mazim epicurei sententiae ut cum, modo reque intellegat ex vix. Vim eu tibique accusamus, quot electram at qui.</p>
-                <p>Eu eleifend repudiandae has. Mea eu ridens aliquam. Nisl <a href='javascript:;'>aeque sit ut</a>, posse dolor utinam cum in. Ad timeam sapientem eos, et eripuit inermis nam. Eos integre voluptaria ne, iriure concludaturque ut eum.</p>
-                <p>Sit et, an ius nihil apeirian. Eu posse tempor iuvaret cum. No diam dolor sea, postea mnesarchum ne ius, vel no utinam ignota dolores. Malis suscipit accusamus his ne, utinam <a href='javascript:;'>assentior
-                        prodesset</a> ea eam, facer partem antiopam et cum.</p>
-                <p>Vis erant intellegat in. Soleat legere no ius, usu ex laoreet molestie. Sit eu sint inermis. Ea zzril scribentur pro.</p>
-                <h1>Tempor essent appetere</h1>
-                <p>Ius mutat commune expetendis in. Nam et quas sensibus reprimique, vix no erat soluta suavitate. At mel eius dictas latine. Corrumpit inciderint reformidans sed no, no usu omnis utinam noluisse.</p>
-                <p>Sit et, an ius nihil apeirian. Eu posse tempor iuvaret cum. No diam dolor sea, postea mnesarchum ne ius, vel no utinam <a href='javascript:;'>ignota dolores</a>. Malis suscipit accusamus his ne, utinam assentior prodesset ea eam, facer
-                    partem antiopam et cum.</p>
-                <p class='dontsplit'>Blandit insolens constituto vix an. Has diam wisi in, eum unum repudiare no. Sit at virtute rationibus, qui vitae explicari cu. Vim ne singulis voluptatum, sed puto accusata salutandi ei. Ad mel civibus adversarium.</p>
-                <p>Per ne solum vivendo, fabulas dolorem vivendo in pro. Nec duis ignota cotidieque no, an per possit nostrum. Pro detraxit definitionem eu. Vivendo officiis no nam, eu has reque maiestatis percipitur, dolore reprimique accommodare cum ad.
-                    No utinam voluptua oportere pri, augue sonet dicant ei sea.</p>
-                <p>Probo debet quaestio an eos, no mel assum iracundia delicatissimi, rebum facete utroque sed ex. Eu melius invidunt repudiandae vix, eu paulo <a href='javascript:;'>reformidans</a> deterruisset duo, solum voluptaria efficiantur ea mel.
-                    Qui summo zzril alienum et. Eu est ferri iuvaret, mazim epicurei sententiae ut cum, modo reque intellegat ex vix. Vim eu tibique accusamus, quot electram at qui.</p>
-                <p>Ex iisque eleifend periculis has. Sit aeterno virtute partiendo ei, eam nonumy bonorum adolescens ad. Ut nec suas vocent ornatus, cetero legendos constituam mea ea, pri cu delenit iracundia. Mundi decore nec te.
-                </p>
-                <h1>Lorem ipsum ne justo</h1>
-                <p>Bonorum has. His ut cibo quas tantas, vis ut probo adhuc definiebas, has at meis debet vulputate. No sed velit essent suavitate, in pro decore ceteros temporibus, usu in odio offendit theophrastus. Mel labore indoctum cu, ad soleat admodum
-                    delicatissimi sed, mei viris tritani ullamcorper eu. Ut vim simul aperiam.
-                </p>
-                <p>Blandit insolens constituto vix an. Has diam wisi in, <a href='javascript:;'>eum unum</a> repudiare no. Sit at virtute rationibus, qui vitae explicari cu. Vim ne singulis voluptatum, sed puto accusata salutandi ei. Ad mel civibus adversarium.</p>
-                <blockquote>
-                    <p>Ius mutat commune expetendis in. Nam et quas sensibus reprimique, vix no erat soluta suavitate. At mel eius dictas latine. Corrumpit inciderint reformidans sed no, no usu omnis utinam noluisse.</p>
-                </blockquote>
-                <p>Probo debet quaestio an eos, no mel assum iracundia delicatissimi, rebum facete utroque sed ex. Eu melius invidunt <img src="{% static 'images/painting3.jpg' %}"> repudiandae vix, eu paulo reformidans deterruisset duo, solum voluptaria
-                    efficiantur ea mel. Qui summo zzril alienum et. Eu est ferri iuvaret, mazim epicurei sententiae ut cum, modo reque intellegat ex vix. Vim eu tibique accusamus, quot electram at qui.</p>
-                <p>Eu eleifend repudiandae has. Mea eu ridens aliquam. Nisl <a href='javascript:;'>aeque sit ut</a>, posse dolor utinam cum in. Ad timeam sapientem eos, et eripuit inermis nam. Eos integre voluptaria ne, iriure concludaturque ut eum.</p>
-                <p>Sit et, an ius nihil apeirian. Eu posse tempor iuvaret cum. No diam dolor sea, postea mnesarchum ne ius, vel no utinam ignota dolores. Malis suscipit accusamus his ne, utinam <a href='javascript:;'>assentior
-                        prodesset</a> ea eam, facer partem antiopam et cum.</p>
-                <p>Vis erant intellegat in. Soleat legere no ius, usu ex laoreet molestie. Sit eu sint inermis. Ea zzril scribentur pro.</p>
-                <h1>Tempor essent appetere</h1>
-                <p>Ius mutat commune expetendis in. Nam et quas sensibus reprimique, vix no erat soluta suavitate. At mel eius dictas latine. Corrumpit inciderint reformidans sed no, no usu omnis utinam noluisse.</p>
-                <p>Sit et, an ius nihil apeirian. Eu posse tempor iuvaret cum. No diam dolor sea, postea mnesarchum ne ius, vel no utinam <a href='javascript:;'>ignota dolores</a>. Malis suscipit accusamus his ne, utinam assentior prodesset ea eam, facer
-                    partem antiopam et cum.</p>
-                <p class='dontsplit'>Blandit insolens constituto vix an. Has diam wisi in, eum unum repudiare no. Sit at virtute rationibus, qui vitae explicari cu. Vim ne singulis voluptatum, sed puto accusata salutandi ei. Ad mel civibus adversarium.</p>
-                <p>Per ne solum vivendo, fabulas dolorem vivendo in pro. Nec duis ignota cotidieque no, an per possit nostrum. Pro detraxit definitionem eu. Vivendo officiis no nam, eu has reque maiestatis percipitur, dolore reprimique accommodare cum ad.
-                    No utinam voluptua oportere pri, augue sonet dicant ei sea.</p>
-                <p>Probo debet quaestio an eos, no mel assum iracundia delicatissimi, rebum facete utroque sed ex. Eu melius invidunt repudiandae vix, eu paulo <a href='javascript:;'>reformidans</a> deterruisset duo, solum voluptaria efficiantur ea mel.
-                    Qui summo zzril alienum et. Eu est ferri iuvaret, mazim epicurei sententiae ut cum, modo reque intellegat ex vix. Vim eu tibique accusamus, quot electram at qui.</p>
-                <p>Ex iisque eleifend periculis has. Sit aeterno virtute partiendo ei, eam nonumy bonorum adolescens ad. Ut nec suas vocent ornatus, cetero legendos constituam mea ea, pri cu delenit iracundia. Mundi decore nec te.
-                </p>
+
+                {% for article in object.article_set.all %}
+                    <h1>{{ article.title }}</h1>
+                    <p><i>By {{ article.author }} at {{ article.date_created }}</i></p>
+                    <p>{{ article.content|safe }}</p>
+                {% endfor %}
+
             </div>
         </div>
-    </div>
 
-
-    <!-- Page scale buttons -->
-    <div style ="position: fixed; bottom: 15px; right:15px;">
-        <a id="zoomOutButton" class="btn btn-secondary btn-circle""><i class="fa fa-minus" aria-hidden="true"></i></i></a>
-        <a id="zoomInButton" class="btn btn-secondary btn-circle"><i class="fa fa-plus" aria-hidden="true"></i></a>
+        <!-- Page scale buttons -->
+        <div style ="position: fixed; bottom: 15px; right:15px;">
+            <a id="zoomOutButton" class="btn btn-outline-secondary btn-circle""><i class="fa fa-minus" aria-hidden="true"></i></i></a>
+            <a id="zoomInButton" class="btn btn-outline-secondary btn-circle"><i class="fa fa-plus" aria-hidden="true"></i></a>
+        </div>
     </div>
+</div>
 
    
 {% endblock content %}
 
 {% block script %}
 
+    <!-- <script>
+        $(document).ready(function() {
+            var width = document.getElementById('page_template').offsetWidth;
+            document.getElementById('content').style.width = width + 'px';
+        });
+    </script> -->
+
     <script>
-        var zoom = 1;
+        var zoom = 0.8;
         var zoomStep = 0.2;
 
         document.getElementById("zoomInButton").addEventListener("click", function() {
-          zoom += zoomStep;
-          document.getElementById("editor").style.transform = "scale(" + zoom + ")";
+            if (zoom < 1) {
+                zoom += zoomStep;
+
+                var editor = document.getElementById("editor");
+                var content = document.getElementById("content");
+
+                editor.style.transform = "scale(" + zoom + ")";
+                // content.style.height = (editor.getBoundingClientRect().height + 100) + "px";
+            }
         });
+
         document.getElementById("zoomOutButton").addEventListener("click", function() {
-          if (zoom > zoomStep) {
-            zoom -= zoomStep;
-            document.getElementById("editor").style.transform = "scale(" + zoom + ")";
-          }
+            if (zoom > zoomStep + 0.01) {
+                zoom -= zoomStep;
+
+                var editor = document.getElementById("editor");
+                var content = document.getElementById("content");
+
+
+                editor.style.transform = "scale(" + zoom + ")";
+                // content.style.height = (editor.getBoundingClientRect().height + 100) + "px";
+
+            }
         });
     </script>
 
     <script>
         $(function() {
-            var content_height = 2078; // the height of the content, discluding the header/footer
+
+            var size = document.getElementById("page_template").getAttribute("size");
+            var content_height = 0; // the height of the content, discluding the header/footer
+
+            switch(size) {
+                case "broadsheet":
+                    content_height = 2680;
+                    break;
+                case "berliner":
+                    content_height = 1620;
+                    break;
+                case "tabloid":
+                    content_height = 1490;
+                    break;
+                default:
+                    content_height = 0;
+                    break;
+            }
+
+            // 1620 - berliner
+            // 2680 - broadsheet
+            // 1490 - tabloid
+
             var page = 1; // the beginning page number to show in the footer
             function buildNewsletter() {
 
@@ -210,7 +218,7 @@
 
                     // here is the columnizer magic
                     $('#newsletterContent').columnize({
-                        columns: 4,
+                        columns: '{{ object.columns }}',
                         target: ".page:last .content",
                         overflow: {
                             height: content_height,
@@ -229,4 +237,113 @@
             setTimeout(buildNewsletter, 1000);
         });
     </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar, #content').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', (event) => {
+
+            var dragSrcEl = null;
+
+            function handleDragStart(e) {
+                // this.style.opacity = '0.4';
+                
+                dragSrcEl = this;
+
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/html', this.innerHTML);
+            }
+
+            function handleDragOver(e) {
+                if (e.preventDefault) {
+                    e.preventDefault();
+                }
+
+                e.dataTransfer.dropEffect = 'move';
+                
+                return false;
+            }
+
+            function handleDragEnter(e) {
+                this.classList.add('over');
+            }
+
+            function handleDragLeave(e) {
+                this.classList.remove('over');
+            }
+
+            function handleDrop(e) {
+                if (e.stopPropagation) {
+                    e.stopPropagation(); // stops the browser from redirecting.
+                }
+                
+                if (dragSrcEl != this) {
+                    dragSrcEl.innerHTML = this.innerHTML;
+                    this.innerHTML = e.dataTransfer.getData('text/html');
+                }
+
+                var items = Array.prototype.slice.call(document.getElementById('homeSubmenu').children);
+                var orders = {};
+                    
+                for (var i = 0; i < items.length; i++) {
+                    orders[items[i].querySelector('#article-id').innerHTML] = items.indexOf(items[i]);
+                }
+
+                console.log(orders);
+
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'app:article-order-update' %}",
+                    data: {
+                        'orders': JSON.stringify(orders),
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    },
+                    success: function () {
+                        console.log($(document.getElementById(e.target.parentElement.querySelector('#article-id').innerHTML)).index())
+                    }
+                });
+                
+                orders = {};
+
+                $('#reload-btn').removeClass('btn-outline-secondary').addClass('btn-info ');
+
+
+                return false;
+            }
+
+            function handleDragEnd(e) {
+                // this.style.opacity = '1';  
+            
+                items.forEach(function (item) {
+                    item.classList.remove('over');
+                });
+            }
+
+
+                let items = document.querySelectorAll('.articles .article-item');
+                items.forEach(function(item) {
+                    item.addEventListener('dragstart', handleDragStart, false);
+                    item.addEventListener('dragenter', handleDragEnter, false);
+                    item.addEventListener('dragover', handleDragOver, false);
+                    item.addEventListener('dragleave', handleDragLeave, false);
+                    item.addEventListener('drop', handleDrop, false);
+                    item.addEventListener('dragend', handleDragEnd, false);
+                });
+            });
+
+    </script>
+
 {% endblock script %}
