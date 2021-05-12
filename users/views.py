@@ -64,4 +64,11 @@ def profile(request):
         'p_form': p_form
     }
 
-    return render(request, 'users/profile.html', context)
+    if isUserInGroup(request.user, "Default user") or isUserInGroup(request.user, "Copy editor"):
+        return render(request, 'users/profile.html', context)
+    else:
+        return render(request, 'users/profile_workers.html', context)
+
+
+def isUserInGroup(user, groupname):
+    return user.groups.filter(name=groupname).exists()

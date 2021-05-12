@@ -90,11 +90,11 @@ class BaseTask(models.Model):
 
     status = models.CharField(max_length=100, choices=STATUS_CHOISES, default='in progress')
 
-    class Meta:
-        abstract=True
+    # class Meta:
+    #     abstract=True
 
     def __str__(self):
-        return "'{}' subtask owned by {} and assigned to {}".format(self.title, self.newspaper.author, self.assignee)
+        return "'{}' subtask owned by {} and assigned to".format(self.title, self.articletask.newspaper.author)
 
 
 class ImageTask(BaseTask):
