@@ -52,15 +52,7 @@
                             <h6 class="mb-3 mt-0">{{ user.groups.all.0 }}</h6> 
 
                             <div class="p-2 mt-2 bg-primary d-flex justify-content-center rounded text-white stats">
-                                <div class="d-flex flex-column"> <span class="articles">Newspapers</span> <span class="number1">{{ user.newspaper_set.count }}</span></div>
-                            </div>
-
-                            <div class="button mt-2 d-flex flex-row align-items-center"> 
-                                <a class="btn btn-sm btn-outline-success w-100" href="{% url 'app:editor-create' %}">Create Newspaper</a>
-                            </div>
-
-                            <div class="button mt-2 d-flex flex-row align-items-center"> 
-                                <a class="btn btn-sm btn-outline-primary w-100" href="{% url 'add-user' %}">Add user</a>
+                                <div class="d-flex flex-column"> <span class="articles">Assigned tasks</span> <span class="number1">{{ user.basetask_set.count }}</span></div>
                             </div>
                         </div>
                     </div>
@@ -97,7 +89,7 @@
 
             <!-- Users newspapers cards -->
             <div class="col-md-7 mb-5">
-                {% if user.imagetask_set.count == 0 %}
+                {% if user.basetask_set.count == 0 %}
                     <div class="nsp-card p-3 mb-3">
                         <div class="d-flex align-items-center">
                             <div class="ml-3 w-100">
@@ -106,7 +98,7 @@
                         </div>
                     </div>
                 {% else %}
-                    {% for task in user.imagetask_set.all %}
+                    {% for task in user.basetask_set.all %}
                         {% if forloop.counter0|divisibleby:2 %}
                             <div class="row">
                         {% endif %}
@@ -114,9 +106,11 @@
                                     <div class="nsp-card p-3 mb-3">
                                         <div class="d-flex align-items-center">
                                             <div class="w-100">
-                                                <h5 class="mb-3 mt-0">{{ task.title }}</h5>
+                                                <h5 class="mt-0">{{ task.title }}</h5>
+                                                <p class="mt-0">{{ task.status }}</p>
                                                 <div class="button mt-2 d-flex flex-row align-items-center">
-                                                    <a class="btn btn-sm btn-outline-primary w-100 mr-1" href="">Open task</a>
+                                                    <!-- <a class="btn btn-sm btn-outline-primary w-100 mr-1" href="{% url 'app:imagetask-submit' articletask_id=task.articletask.id pk=task.id %}">Open task</a> -->
+                                                    <a class="btn btn-sm btn-outline-primary w-100 mr-1" href="{% url 'app:subtask-submit' articletask_id=task.articletask.id pk=task.id %}">Open task</a>
 
                                                     <a class="btn btn-sm btn-outline-danger w-100" href="">Delete task</a>
                                                 </div>
@@ -130,7 +124,7 @@
                     {% endfor %}
                 {% endif %}
             </div>
-        {% if user.newspaper_set.count|length|divisibleby:2 %}
+        {% if user.basetask_set.count|length|divisibleby:2 %}
             </div>
         {% endif %}
     </div>

@@ -1,5 +1,6 @@
 from typing import Text
 from django.contrib.auth.decorators import login_required
+from django.db.models import base, fields
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
@@ -255,8 +256,13 @@ class SubtaskView(LoginRequiredMixin, PermissionRequiredMixin):
 
     # Check if it is a user's newspaper
     def has_permission(self):
-        print(self.request.user.groups.filter(name='Copy editor').exists())
         return self.request.user == self.articletask.newspaper.author and isUserInGroup(self.request.user, 'Copy editor')
+
+
+class SubtaskViewWithWorkerPermission(SubtaskView):
+    # Override
+    def has_permission(self) -> bool:
+        return self.request.user == self.get_object().assignee
 
 
 # Create new image subtask in existing article task
@@ -274,6 +280,12 @@ class ImageTaskDeleteView(SubtaskView, DeleteView):
 class ImageTaskUpdateView(SubtaskView, UpdateView):
     model = ImageTask
     fields = ['status']
+
+
+# Show info about existing image subtask for assigned worker
+class ImageTaskSubmitView(SubtaskViewWithWorkerPermission, UpdateView):
+    model = ImageTask
+    fields = ['title', 'description', 'image']
 
 
 
@@ -294,6 +306,13 @@ class TextTaskUpdateView(SubtaskView, UpdateView):
     fields = ['status']
 
 
+# Show info about existing text subtask for assigned worker
+class TextTaskSubmitView(SubtaskViewWithWorkerPermission, UpdateView):
+    model = TextTask
+    fields = ['title', 'description', 'article_title', 'content', 'author']
+    template_name = "app/imagetask_form.html"
+
+
 
 # Create new ad subtask in existing article task
 class AdTaskCreateView(SubtaskView, CreateView):
@@ -310,6 +329,13 @@ class AdTaskDeleteView(SubtaskView, DeleteView):
 class AdTaskUpdateView(SubtaskView, UpdateView):
     model = AdTask
     fields = ['status']
+
+
+# Show info about existing ad subtask for assigned worker
+class AdTaskSubmitView(SubtaskViewWithWorkerPermission, UpdateView):
+    model = AdTask
+    fields = ['title', 'description', 'ad_title', 'content']
+    template_name = "app/imagetask_form.html"
 
 
 
@@ -329,6 +355,32 @@ class TypoTaskUpdateView(SubtaskView, UpdateView):
     model = TypoTask
     fields = ['status']
 
+
+# Show info about existing typo task for assigned worker
+class TypoTaskSubmitView(SubtaskViewWithWorkerPermission, UpdateView):
+    model = TypoTask
+    
+"""
+TODO 
+Надо что-то придумать с типографом и с созданием самой статьи 
+из собранных материалов
+
+Как вариант - если пользователь впервые открывает просмотр статьи,
+то статья создается, наполнясь материалами в рандомном порядке
+
+Вопрос - как ее заполнить материалом
+
+При последующих открытиях статья просто открывается в режиме редактирования
+"""
+
+
+def taskSubmitRedirect(request, articletask_id, pk):
+    if isUserInGroup(request.user, "Illustrator"):
+        return redirect("app:imagetask-submit", articletask_id=articletask_id, pk=pk)
+    elif isUserInGroup(request.user, "Author"):
+        return redirect("app:texttask-submit", articletask_id=articletask_id, pk=pk)
+    elif isUserInGroup(request.user, "Advertisement designer"):
+        return redirect("app:adtask-submit", articletask_id=articletask_id, pk=pk)
 
 
 def index(request):

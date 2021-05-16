@@ -65,6 +65,7 @@ class ArticleTask(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     newspaper = models.ForeignKey(Newspaper, on_delete=models.CASCADE, default=0)
+    # article = models.OneToOneField(Article, on_delete=models.CASCADE, null=True)
 
     STATUS_CHOISES = (
         ('in progress', 'in progress'),
@@ -78,6 +79,7 @@ class ArticleTask(models.Model):
 
 
 class BaseTask(models.Model):
+    assignee = models.ForeignKey(User, on_delete=models.CASCADE)
     articletask = models.ForeignKey(ArticleTask, on_delete=CASCADE)
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
@@ -98,12 +100,12 @@ class BaseTask(models.Model):
 
 
 class ImageTask(BaseTask):
-    assignee = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'groups__name': "Illustrator"})
-    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
+    # assignee = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'groups__name': "Illustrator"})
+    image = models.ImageField(default='default.jpg', upload_to='uploads')
 
 
 class TextTask(BaseTask):
-    assignee = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'groups__name': "Author"})
+    # assignee = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'groups__name': "Author"})
     article_title = models.CharField(max_length=100, blank=True)
     content = RichTextUploadingField(config_name='custom_ckeditor', blank=True, null=True)
     author = models.CharField(max_length=50)
@@ -111,10 +113,11 @@ class TextTask(BaseTask):
 
 
 class AdTask(BaseTask):
-    assignee = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'groups__name': "Advertisement designer"})
+    # assignee = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'groups__name': "Advertisement designer"})
     ad_title = models.CharField(max_length=100, blank=True)
     content = RichTextUploadingField(config_name='custom_ckeditor', blank=True, null=True)
 
 
 class TypoTask(BaseTask):
-    assignee = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'groups__name': "Head of typography"})
+    # assignee = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'groups__name': "Head of typography"})
+    pass

@@ -8,6 +8,7 @@ from .views import (
     ArticleCreateView,
     ArticleUpdateView,
     ArticleDeleteView,
+    taskSubmitRedirect,
     updateArticleOrder,
     ArticleTaskCreateView,
     ArticleTaskDeleteView,
@@ -15,12 +16,15 @@ from .views import (
     ImageTaskCreateView,
     ImageTaskDeleteView,
     ImageTaskUpdateView,
+    ImageTaskSubmitView,
     TextTaskCreateView,
     TextTaskDeleteView,
     TextTaskUpdateView,
+    TextTaskSubmitView,
     AdTaskCreateView,
     AdTaskDeleteView,
     AdTaskUpdateView,
+    AdTaskSubmitView,
     TypoTaskCreateView,
     TypoTaskDeleteView,
     TypoTaskUpdateView
@@ -42,15 +46,20 @@ urlpatterns = [
     path("newspaper/<int:newspaper_id>/articletask/<int:pk>/delete", ArticleTaskDeleteView.as_view(), name='articletask-delete'),
     path("newspaper/<int:newspaper_id>/articletask/<int:pk>/update", ArticleTaskUpdateView.as_view(), name='articletask-update'),
 
+    path("articletask/<int:articletask_id>/subtask/<int:pk>/submit", views.taskSubmitRedirect, name="subtask-submit"),
+
     path("newspaper/<int:newspaper_id>/articletask/<int:articletask_id>/newimagetask", ImageTaskCreateView.as_view(), name='imagetask-create'),
+    path("articletask/<int:articletask_id>/imagetask/<int:pk>/submit", ImageTaskSubmitView.as_view(), name='imagetask-submit'),
     path("newspaper/<int:newspaper_id>/articletask/<int:articletask_id>/imagetask/<int:pk>/delete", ImageTaskDeleteView.as_view(), name='imagetask-delete'),
     path("newspaper/<int:newspaper_id>/articletask/<int:articletask_id>/imagetask/<int:pk>/update", ImageTaskUpdateView.as_view(), name='imagetask-update'),
 
     path("newspaper/<int:newspaper_id>/articletask/<int:articletask_id>/newtexttask", TextTaskCreateView.as_view(), name='texttask-create'),
+    path("articletask/<int:articletask_id>/texttask/<int:pk>/submit", TextTaskSubmitView.as_view(), name='texttask-submit'),
     path("newspaper/<int:newspaper_id>/articletask/<int:articletask_id>/texttask/<int:pk>/delete", TextTaskDeleteView.as_view(), name='texttask-delete'),
     path("newspaper/<int:newspaper_id>/articletask/<int:articletask_id>/texttask/<int:pk>/update", TextTaskUpdateView.as_view(), name='texttask-update'),
 
     path("newspaper/<int:newspaper_id>/articletask/<int:articletask_id>/newadtask", AdTaskCreateView.as_view(), name='adtask-create'),
+    path("articletask/<int:articletask_id>/adtask/<int:pk>/submit", AdTaskSubmitView.as_view(), name='adtask-submit'),
     path("newspaper/<int:newspaper_id>/articletask/<int:articletask_id>/adtask/<int:pk>/delete", AdTaskDeleteView.as_view(), name='adtask-delete'),
     path("newspaper/<int:newspaper_id>/articletask/<int:articletask_id>/adtask/<int:pk>/update", AdTaskUpdateView.as_view(), name='adtask-update'),
 
