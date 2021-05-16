@@ -8,6 +8,8 @@ from django.urls import reverse
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
 
+from model_utils import FieldTracker
+
 
 class Newspaper(models.Model):
     title = models.CharField(max_length=100)
@@ -42,30 +44,12 @@ class Newspaper(models.Model):
         # return reverse('editor', kwargs={'pk': self.pk})
     
 
-
-class Article(models.Model):
-    title = models.CharField(max_length=100)
-    # content = RichTextField(config_name='custom_ckeditor', blank=True, null=True)
-    content = RichTextUploadingField(config_name='custom_ckeditor', blank=True, null=True)
-    author = models.CharField(max_length=50)
-    date_created = models.DateField(default=timezone.now)
-    newspaper = models.ForeignKey(Newspaper, on_delete=models.CASCADE)
-    order = models.IntegerField(default=1000, null=True)
-
-    class Meta:
-        ordering = ['order']
-
-    def __str__(self):
-        return "'{}' written by {}".format(self.title, self.author)
-
-
-
 class ArticleTask(models.Model):
     date_created = models.DateField(default=timezone.now)
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     newspaper = models.ForeignKey(Newspaper, on_delete=models.CASCADE, default=0)
-    # article = models.OneToOneField(Article, on_delete=models.CASCADE, null=True)
+    
 
     STATUS_CHOISES = (
         ('in progress', 'in progress'),
@@ -76,6 +60,24 @@ class ArticleTask(models.Model):
 
     def __str__(self):
         return "'{}' article task owned by {}".format(self.title, self.newspaper.author)
+
+
+class Article(models.Model):
+    title = models.CharField(max_length=100)
+    # content = RichTextField(config_name='custom_ckeditor', blank=True, null=True)
+    content = RichTextUploadingField(config_name='custom_ckeditor', blank=True)
+    author = models.CharField(max_length=50)
+    date_created = models.DateField(default=timezone.now)
+    newspaper = models.ForeignKey(Newspaper, on_delete=models.CASCADE)
+    order = models.IntegerField(default=1000, null=True)
+
+    articletask = models.OneToOneField(ArticleTask, on_delete=models.CASCADE, null=True)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return "'{}' written by {}".format(self.title, self.author)
 
 
 class BaseTask(models.Model):
@@ -101,21 +103,24 @@ class BaseTask(models.Model):
 
 class ImageTask(BaseTask):
     # assignee = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'groups__name': "Illustrator"})
-    image = models.ImageField(default='default.jpg', upload_to='uploads')
+    image = RichTextUploadingField(config_name='custom_ckeditor', blank=True, null=True)
+    tracker = FieldTracker()
 
 
 class TextTask(BaseTask):
     # assignee = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'groups__name': "Author"})
     article_title = models.CharField(max_length=100, blank=True)
-    content = RichTextUploadingField(config_name='custom_ckeditor', blank=True, null=True)
-    author = models.CharField(max_length=50)
+    content = RichTextUploadingField(config_name='custom_ckeditor')
+    author = models.CharField(max_length=50, blank=True)
     date_created = models.DateField(default=timezone.now)
+    tracker = FieldTracker()
 
 
 class AdTask(BaseTask):
     # assignee = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'groups__name': "Advertisement designer"})
     ad_title = models.CharField(max_length=100, blank=True)
     content = RichTextUploadingField(config_name='custom_ckeditor', blank=True, null=True)
+    tracker = FieldTracker()
 
 
 class TypoTask(BaseTask):

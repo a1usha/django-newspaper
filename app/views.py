@@ -127,7 +127,7 @@ class ArticleUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
 
     # Check if it is a user's newspaper
     def has_permission(self):
-        return self.request.user == self.newspaper.author
+        return self.request.user == self.newspaper.author or isUserInGroup(self.request.user, 'Head of typography')
 
 
 # Delete article
@@ -360,18 +360,6 @@ class TypoTaskUpdateView(SubtaskView, UpdateView):
 class TypoTaskSubmitView(SubtaskViewWithWorkerPermission, UpdateView):
     model = TypoTask
     
-"""
-TODO 
-Надо что-то придумать с типографом и с созданием самой статьи 
-из собранных материалов
-
-Как вариант - если пользователь впервые открывает просмотр статьи,
-то статья создается, наполнясь материалами в рандомном порядке
-
-Вопрос - как ее заполнить материалом
-
-При последующих открытиях статья просто открывается в режиме редактирования
-"""
 
 
 def taskSubmitRedirect(request, articletask_id, pk):
@@ -381,6 +369,10 @@ def taskSubmitRedirect(request, articletask_id, pk):
         return redirect("app:texttask-submit", articletask_id=articletask_id, pk=pk)
     elif isUserInGroup(request.user, "Advertisement designer"):
         return redirect("app:adtask-submit", articletask_id=articletask_id, pk=pk)
+    elif isUserInGroup(request.user, "Head of typography"):
+        articletask = ArticleTask.objects.get(pk=articletask_id)
+        article = Article.objects.get(articletask=articletask)
+        return redirect("app:article-update", newspaper_id=article.newspaper.id, pk=article.id)
 
 
 def index(request):
