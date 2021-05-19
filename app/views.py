@@ -309,7 +309,7 @@ class TextTaskUpdateView(SubtaskView, UpdateView):
 # Show info about existing text subtask for assigned worker
 class TextTaskSubmitView(SubtaskViewWithWorkerPermission, UpdateView):
     model = TextTask
-    fields = ['title', 'description', 'article_title', 'content', 'author']
+    fields = ['title', 'description', 'article_title', 'content', 'author', 'status']
     template_name = "app/imagetask_form.html"
 
 
